@@ -6,27 +6,26 @@
         <meta name="description" content="Participez au quiz TCF pour tester vos connaissances en français. Découvrez votre niveau de maîtrise, de A1 à C2, et progressez avec l'Institut Balzac.">
         <meta name="keywords" content="Quiz TCF, test de français, niveau de français, évaluation de langue, Institut Balzac, test TCF, niveau A1 C2, apprendre français">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Quiz TCF Français - Testez et Évaluez Votre Niveau de Langue | Institut Balzac</title>
+        <title>Login page</title>
+        <!-- <title>Quiz TCF Français - Testez et Évaluez Votre Niveau de Langue | Institut Balzac</title> -->
         <script src="/js/tailwind.js"></script>
     </head>
     <body class="bg-gradient-to-b from-blue-600 to-sky-100 w-full h-screen flex flex-col justify-center items-center">
-        <header class="-translate-y-32">
-            <img class="w-28" src="Images/Balzac-logo.png" alt="Balzac-logo">
+        <header class="absolute top-0 mt-5">
+            <a href="admin.html"><img class="w-28" src="Images/Balzac-logo.png" alt="Balzac-logo"></a>
         </header>
 
         <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm p-8 rounded-lg w-72 shadow-lg text-center md:w-96">
-
-            <h1 class="text-3xl font-bold text-white mb-4">TITRE</h1>
+            <h1 class="text-3xl font-bold text-white mb-4 uppercase">Welcome</h1>
             <hr class="border-t border-white mb-6">
         
             <div class="mb-4">
-                <label for="username" class="sr-only">Username</label>
-                <input type="text" id="username" placeholder="Username :" class="w-full p-3 rounded-lg text-gray-700 bg-white bg-opacity-80 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="text" id="username" placeholder="Username" class="w-full p-3 rounded-lg text-gray-700 bg-white bg-opacity-80 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
         
             <p id="error" class="text-red-500 text-sm mb-4 hidden">User already exists</p>
         
-            <button id="btnContinue" class="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg duration-300 hover:bg-blue-700" disabled>Continue</button>
+            <button id="btnContinue" class="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg duration-300 hover:bg-blue-700">Continue</button>
         </div>
         
         <script>
@@ -34,21 +33,29 @@
             const btnContinue = document.getElementById("btnContinue");
             const usernameInput = document.getElementById("username");
         
-            usernameInput.addEventListener("input", () => {
-                error.classList.add("hidden"); 
-                btnContinue.disabled = usernameInput.value.trim() === ""; // btn enabled only if user typed username
-            });
-        
             btnContinue.addEventListener("click", () => {
+
                 const username = usernameInput.value.trim();
         
-                if (localStorage.getItem(username)) {
+                if (username === "") {
+                    error.textContent = "Please enter a username.";
                     error.classList.remove("hidden");
+                    return;
+                }
+        
+                const existingId = localStorage.getItem(username);
+        
+                if (existingId) {
+                    window.location.href = "index.html";
                 } else {
                     const randId = Math.floor(100000 + Math.random() * 900000);
                     localStorage.setItem(username, randId);
-                    window.location.href = "index.html";  
+                    window.location.href = "index.html";
                 }
+            });
+
+            usernameInput.addEventListener("input", () => {
+                error.classList.add("hidden");
             });
         </script>
     </body>
