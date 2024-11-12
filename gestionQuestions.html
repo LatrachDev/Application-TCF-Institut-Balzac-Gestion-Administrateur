@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Participez au quiz TCF pour tester vos connaissances en français. Découvrez votre niveau de maîtrise, de A1 à C2, et progressez avec l'Institut Balzac.">
+        <meta name="keywords" content="Quiz TCF, test de français, niveau de français, évaluation de langue, Institut Balzac, test TCF, niveau A1 C2, apprendre français">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Quiz TCF Français - Testez et Évaluez Votre Niveau de Langue | Institut Balzac</title>
+        <script src="/js/tailwind.js"></script>
+    </head>
+    <body class="bg-gradient-to-b from-blue-600 to-sky-100 flex flex-col items-center p-8">
+
+      <h1 class="text-2xl font-bold text-white my-6 text-center">Manage Quiz Questions</h1>
+      
+      <form id="questionForm" class="bg-white shadow-md rounded-lg p-6 mb-8 w-full max-w-lg">
+          
+        <div class="mb-4">
+          <label for="questionText" class="block text-gray-700 font-semibold mb-2">Question Text</label>
+          <input type="text" id="questionText" placeholder="Enter question text" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" required>
+        </div>
+
+        <div class="mb-4">
+          <label for="answerOptions" class="block text-gray-700 font-semibold mb-2">Answer Options (comma-separated)</label>
+          <input type="text" id="answerOptions" placeholder="Option1, Option2, Option3, ..." class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" required>
+        </div>
+
+        <div class="mb-4">
+          <label for="correctAnswer" class="block text-gray-700 font-semibold mb-2">Correct Answer</label>
+          <input type="text" id="correctAnswer" placeholder="Correct Answer" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" required>
+        </div>
+
+        <div class="mb-4">
+          <label for="level" class="block text-gray-700 font-semibold mb-2">Level</label>
+          <select id="level" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+            <option value="A1">A1</option>
+            <option value="A2">A2</option>
+            <option value="B1">B1</option>
+            <option value="B2">B2</option>
+            <option value="C1">C1</option>
+            <option value="C2">C2</option>
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <label for="category" class="block text-gray-700 font-semibold mb-2">Category</label>
+          <select id="category" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+            <option value="Grammar">Grammar</option>
+            <option value="Vocabulary">Vocabulary</option>
+            <option value="Comprehension">Comprehension</option>
+          </select>
+        </div>
+
+        <button type="submit" class="w-full bg-blue-500 text-white font-bold py-2 rounded-lg hover:bg-blue-600">Add/Update Question</button>
+      </form>
+      
+      <div id="questionsContainer" class="w-full max-w-lg">
+      </div>
+      
+        <script src="js/gestionQuestions.js"></script>
+    </body>
+</html>
