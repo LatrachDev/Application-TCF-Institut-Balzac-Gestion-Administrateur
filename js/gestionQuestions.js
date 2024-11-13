@@ -17,17 +17,16 @@ questionForm.addEventListener('submit', (event) => {
   questionForm.reset();
 });
 
-// Function to add or update question in localStorage
 function addOrUpdateQuestion() {
-  const questionData = {
-    id: Date.now(), // Unique ID based on timestamp
-    text: questionText.value,
-    options: answerOptions.value.split(',').map(opt => opt.trim()),
-    correct: correctAnswer.value,
-    level: level.value,
-    category: category.value
-  };
-
+    const questionData = {
+        id: questionForm.dataset.editId ? Number(questionForm.dataset.editId) : Date.now(), // Use editId if available
+        text: questionText.value,
+        options: answerOptions.value.split(',').map(opt => opt.trim()),
+        correct: correctAnswer.value,
+        level: level.value,
+        category: category.value
+    };
+    
   let questions = JSON.parse(localStorage.getItem('questions')) || [];
   
   // If editing an existing question, replace it
@@ -39,6 +38,8 @@ function addOrUpdateQuestion() {
   }
 
   localStorage.setItem('questions', JSON.stringify(questions));
+
+  delete questionForm.dataset.editId;
 }
 
 // Function to display questions from localStorage
