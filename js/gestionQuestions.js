@@ -1,4 +1,3 @@
-// Select form elements
 const questionForm = document.getElementById('questionForm');
 const questionText = document.getElementById('questionText');
 const answerOptions = document.getElementById('answerOptions');
