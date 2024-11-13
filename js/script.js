@@ -979,17 +979,64 @@ const quizQuestions = [
     
     const storedQuizQuestionsJSON = JSON.parse(localStorage.getItem('quizQuestions'));
      
-  let timer;
-  let currentQuestionIndex = 0;
-  let score = 0;
-    document.querySelectorAll('.niveau-button').forEach(button => {
-      button.addEventListener('click', () => {
-          const level = button.getAttribute('data-level');
-          showCategories(level);
-      });
-  });
+    let timer; 
+let currentQuestionIndex = 0; 
+let score = 0; 
+let currentLevel = ''; 
+let currentCategory = ''; 
+
+function loadStoredData() {
+const storedData = JSON.parse(localStorage.getItem('quizData')) || {};
+
+currentLevel = storedData.currentLevel || '';
+
+
+if (currentLevel) {
+    currentCategory = storedData[currentLevel]?.currentCategory || '';
+}
+
+score = storedData[currentLevel]?.[currentCategory]?.score || 0;
+currentQuestionIndex = storedData[currentLevel]?.[currentCategory]?.currentQuestionIndex || 0;
+
+console.log("Niveau actuel:", currentLevel);
+console.log("Catégorie actuelle:", currentCategory);
+console.log("Score:", score);
+console.log("Indice de question actuel:", currentQuestionIndex);
+}
+
+function saveData() {
+const storedData = JSON.parse(localStorage.getItem('quizData')) || {};
+
+if (!storedData[currentLevel]) {
+    storedData[currentLevel] = {};
+}
+
+if (!storedData[currentLevel][currentCategory]) {
+    storedData[currentLevel][currentCategory] = {};
+}
+
+storedData[currentLevel][currentCategory] = {
+    score: score,
+    currentQuestionIndex: currentQuestionIndex
+};
+
+
+storedData.currentLevel = currentLevel;
+storedData.currentCategory = currentCategory; 
+
+localStorage.setItem('quizData', JSON.stringify(storedData));
+}
+
+document.querySelectorAll('.niveau-button').forEach(button => {
+button.addEventListener('click', () => {
+    const level = button.getAttribute('data-level');
+    currentLevel = level; 
+    showCategories(level); 
+});
+});
 
   function showCategories(level) {
+    currentLevel = level;
     const categoriesSection = document.querySelector('.categories-section');
     const categoriesContainer = categoriesSection.querySelector('.categories-container');
     categoriesContainer.innerHTML = ''; 
@@ -1025,6 +1072,7 @@ const quizQuestions = [
 
 
   function showQuiz(level, category) {
+    currentCategory = category;
     const levelData = storedQuizQuestionsJSON.find(q => q.level === level);
     const questions = levelData.categories[category];
 
@@ -1120,22 +1168,21 @@ function checkAnswer(level, category, questionIndex, selectedOptionIndex) {
 const questions = storedQuizQuestionsJSON.find(q => q.level === level).categories[category]; 
 const question = questions[questionIndex]; 
 
-
 if (selectedOptionIndex === question.answer) { 
-    score++;
+    score++; 
 } 
 
 currentQuestionIndex++; 
-console.log(`Current Question Index: ${currentQuestionIndex}`); 
+saveData(); 
 
 if (currentQuestionIndex < questions.length) { 
     displayQuestion(questions, level, category); 
 } else { 
-    clearInterval(timer);
-    console.log('All questions answered. Showing results. '); 
-    showResults(questions.length);
+    clearInterval(timer); 
+    showResults(questions.length); 
 } 
 }
+
 
 function showResults(totalQuestions) {
 const resultContainer = document.querySelector('.resultat-container');
@@ -1226,42 +1273,60 @@ levels.forEach(level => {
 });
 }
 
-function unlockNextLevel(currentLevel) {
-const levelData = storedQuizQuestionsJSON.find(q => q.level === currentLevel);
-const categories = Object.keys(levelData.categories);
-let allCategoriesUnlocked = true;
+function restartQuiz() {
+currentQuestionIndex = 0; 
+score = 0; 
+saveData();
+}
 
 
-categories.forEach(category => {
-    if (levelScores[currentLevel][category] < 10) {
-        allCategoriesUnlocked = false;
-    }
-});
+function unlockNextLevel(currentLevel) { 
+const levelData = storedQuizQuestionsJSON.find(q => q.level === currentLevel); 
+const categories = Object.keys(levelData.categories); 
+let allCategoriesUnlocked = true; 
 
+categories.forEach(category => { 
+    if (levelScores[currentLevel][category] < 10) { 
+        allCategoriesUnlocked = false; 
+    } 
+}); 
 
-if (allCategoriesUnlocked) {
-    const nextLevelIndex = Object.keys(levelScores).indexOf(currentLevel) + 1;
-    const nextLevel = Object.keys(levelScores)[nextLevelIndex];
-    if (nextLevel && !unlockedLevels.includes(nextLevel)) {
-        unlockedLevels.push(nextLevel);
-        alert(`Le niveau ${nextLevel} est maintenant débloqué !`);
+if (allCategoriesUnlocked) { 
+    const nextLevelIndex = Object.keys(levelScores).indexOf(currentLevel) + 1; 
+    const nextLevel = Object.keys(levelScores)[nextLevelIndex]; 
+    if (nextLevel && !unlockedLevels.includes(nextLevel)) { 
+        unlockedLevels.push(nextLevel); 
+        saveData(); 
+        alert(`Le niveau ${nextLevel} est maintenant débloqué !`); 
         showLevels(); 
-    }
+    } 
+} 
 }
-}
 
 
-
-document.addEventListener('DOMContentLoaded', () => {
-
-const storedQuizQuestionsJSON = JSON.parse(localStorage.getItem('quizQuestions'));
-
-
-showLevels();
+document.addEventListener('DOMContentLoaded', () => { 
+loadStoredData(); 
+showLevels(); 
 });
+
 
 
 if (currentQuestionIndex >= totalQuestions) {
 showResults(totalQuestions);
 }
 
+function restartQuiz() {
+currentQuestionIndex = 0; 
+score = 0; 
+saveData(); 
+}
+
+function initializeData() {
+const initialData = {
+    currentLevel: '',
+    currentCategory: '',
+    A1: { grammaire: { score: 0, currentQuestionIndex: 0 }, vocabulaire: { score: 0, currentQuestionIndex: 0 }, comprehension: { score: 0, currentQuestionIndex: 0 } },
+    
+};
+localStorage.setItem('quizData', JSON.stringify(initialData));
+}
