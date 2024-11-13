@@ -979,228 +979,236 @@ const quizQuestions = [
     
     const storedQuizQuestionsJSON = JSON.parse(localStorage.getItem('quizQuestions'));
      
-  let timer;  
-  let currentQuestionIndex = 0; 
+  let timer; // Variable pour le timer 
+  let currentQuestionIndex = 0; // Index de la question actuelle
   let score = 0;
-
-document.addEventListener('DOMContentLoaded', () => {
-const usernameInput = document.getElementById('usernameInput');
-
-// Assuming you have a button to start the quiz
-const startButton = document.getElementById('startButton'); // Replace with your actual button ID
-
-startButton.addEventListener('click', () => {
-    const username = usernameInput.value.trim();
-    const userId = localStorage.getItem(username);
-    const userKey = `user_${userId}`;
-
-    // Check if userId is null (username not found)
-    if (!userId) {
-        alert("User  not found. Please enter a valid username.");
-        return; // Exit the function if the user is not found
-    }
-
-    // Initialize user data if it doesn't exist
-    if (!localStorage.getItem(userKey)) {
-        const userData = {
-            level: "A1", // Default level
-            score: 0
-        };
-        localStorage.setItem(userKey, JSON.stringify(userData));
-    }
-
-    // Proceed with the rest of your quiz logic
-    const storedQuizQuestionsJSON = JSON.parse(localStorage.getItem('quizQuestions'));
     document.querySelectorAll('.niveau-button').forEach(button => {
       button.addEventListener('click', () => {
           const level = button.getAttribute('data-level');
           showCategories(level);
       });
   });
+
   function showCategories(level) {
     const categoriesSection = document.querySelector('.categories-section');
     const categoriesContainer = categoriesSection.querySelector('.categories-container');
-    categoriesContainer.innerHTML = ''; 
+    categoriesContainer.innerHTML = ''; // Clear previous categories
 
-    const levelData = storedQuizQuestionsJSON.find(q => q.level === level); 
-    console.log('Niveau sélectionné:', level);
-    console.log('Données du niveau:', levelData);
-
+    const levelData = storedQuizQuestionsJSON.find(q => q.level === level);
     if (levelData) {
         Object.keys(levelData.categories).forEach(category => {
             const categoryDiv = document.createElement('div');
             categoryDiv.classList.add('category');
 
             const categoryButton = document.createElement('button');
-            categoryButton.textContent = category.charAt(0).toUpperCase() + category.slice(1); 
+            categoryButton.textContent = category.charAt(0).toUpperCase() + category.slice(1);
             categoryButton.addEventListener('click', () => showQuiz(level, category));
 
             categoryDiv.appendChild(categoryButton);
-            categoriesContainer.appendChild(categoryDiv); // 
+            categoriesContainer.appendChild(categoryDiv);
         });
-    } else {
-        console.log('Aucune donnée trouvée pour ce niveau.');
     }
 
+    // Ajouter un bouton pour revenir au niveau
     const backToLevelsButton = document.createElement('button');
     backToLevelsButton.textContent = 'Retourner aux niveaux';
     backToLevelsButton.addEventListener('click', () => {
-        document.querySelector('.niveaux-section').style.display = 'block'; 
-        categoriesSection.style.display = 'none';
+        document.querySelector('.niveaux-section').style.display = 'block'; // Afficher la section des niveaux
+        categoriesSection.style.display = 'none'; // Masquer la section des catégories
     });
 
-    categoriesContainer.appendChild(backToLevelsButton);r
+    categoriesContainer.appendChild(backToLevelsButton); // Ajouter le bouton au conteneur des catégories
 
-    document.querySelector('.niveaux-section').style.display = 'none'; 
+    // Show categories section and hide niveaux section
+    document.querySelector('.niveaux-section').style.display = 'none';
     categoriesSection.style.display = 'block';
 }
-    function showQuiz(level, category) {
-        const levelData = storedQuizQuestionsJSON.find(q => q.level === level);
-        const questions = levelData.categories[category];
 
-        currentQuestionIndex = 0;
-        score = 0;
 
-        const quizContainer = document.querySelector('.listquiz');
-        quizContainer.innerHTML = '';
+  function showQuiz(level, category) {
+    const levelData = storedQuizQuestionsJSON.find(q => q.level === level);
+    const questions = levelData.categories[category];
 
-        document.querySelector('.niveaux-section').style.display = 'none';
-        document.querySelector('.categories-section').style.display = 'none';
+    currentQuestionIndex = 0; // Réinitialiser l'index à 0 pour chaque nouveau quiz
+    score = 0; // Réinitialiser le score à 0
 
-        const backToCategoriesButton = document.createElement('button');
-        backToCategoriesButton.textContent = 'Retourner aux catégories';
-        backToCategoriesButton.addEventListener('click', () => {
-            document.querySelector('.categories-section').style.display = 'block';
-            document.querySelector('.hidden').style.display = 'none';
-        });
+    const quizContainer = document.querySelector('.listquiz');
+    quizContainer.innerHTML = ''; // Clear previous quiz
 
-        quizContainer.appendChild(backToCategoriesButton);
+    // Masquer les sections de niveaux et de catégories
+    document.querySelector('.niveaux-section').style.display = 'none';
+    document.querySelector('.categories-section').style.display = 'none';
 
-        displayQuestion(questions, level, category);
+    // Ajouter un bouton pour revenir à la catégorie
+    const backToCategoriesButton = document.createElement('button');
+    backToCategoriesButton.textContent = 'Retourner aux catégories';
+    backToCategoriesButton.addEventListener('click', () => {
+        document.querySelector('.categories-section').style.display = 'block'; // Afficher la section des catégories
+        document.querySelector('.hidden').style.display = 'none'; // Masquer la section du quiz
+    });
+    
+    quizContainer.appendChild(backToCategoriesButton); // Ajouter le bouton au conteneur du quiz
 
-        document.querySelector('.hidden').style.display = 'block';
-    }
+    // Affiche la première question
+    displayQuestion(questions, level, category);
 
-    function displayQuestion(questions, level, category) {
-        const quizContainer = document.querySelector('.listquiz');
-        quizContainer.innerHTML = '';
+    // Show quiz section
+    document.querySelector('.hidden').style.display = 'block';
+}
 
-        const question = questions[currentQuestionIndex];
-        const questionDiv = document.createElement('div');
-        questionDiv.classList.add('qst');
-        questionDiv.innerHTML = `<p>${currentQuestionIndex + 1}. ${question.question}</p>`;
+function displayQuestion(questions, level, category) {
+  const quizContainer = document.querySelector('.listquiz');
+  quizContainer.innerHTML = ''; // Clear previous question
 
-        const responsesDiv = document.createElement('div');
-        responsesDiv.classList.add('reponses');
+  const question = questions[currentQuestionIndex]; // Obtenez la question actuelle
 
-        question.options.forEach((option, i) => {
-            const responseButton = document.createElement('button');
-            responseButton.classList.add('rep');
-            responseButton.innerHTML = `<p>${option}</p>`;
+  const questionDiv = document.createElement('div');
+  questionDiv.classList.add('qst');
+  questionDiv.innerHTML = `<p>${currentQuestionIndex + 1}. ${question.question}</p>`;
 
-            responseButton.addEventListener('click', () => {
-              checkAnswer(level, category, currentQuestionIndex, i);
-              disableResponseButtons(responsesDiv);
-          });
+  const responsesDiv = document.createElement('div');
+  responsesDiv.classList.add('reponses');
 
-          responsesDiv.appendChild(responseButton);
+  question.options.forEach((option, i) => {
+      const responseButton = document.createElement('button');
+      responseButton.classList.add('rep');
+      responseButton.innerHTML = `<p>${option}</p>`;
+      
+      // Ajoutez un gestionnaire d'événements pour vérifier la réponse
+      responseButton.addEventListener('click', () => {
+          checkAnswer(level, category, currentQuestionIndex, i); // Vérifiez la réponse
+          disableResponseButtons(responsesDiv); // Désactivez tous les boutons de réponse
       });
+      
+      responsesDiv.appendChild(responseButton);
+  });
 
-      quizContainer.appendChild(questionDiv);
-      quizContainer.appendChild(responsesDiv);
+  quizContainer.appendChild(questionDiv);
+  quizContainer.appendChild(responsesDiv);
 
-      const timerDisplay = document.querySelector('.timer-display');
-      let timeLeft = 20;
+  // Timer
+  const timerDisplay = document.querySelector('.timer-display');
+  let timeLeft = 20; // Durée du timer
+  timerDisplay.textContent = `Temps restant : ${timeLeft}s`; // Initialiser le timer
+
+  // Démarrer le timer
+  clearInterval(timer); // Assurez-vous de nettoyer l'ancien timer
+  timer = setInterval(() => {
+      timeLeft--;
       timerDisplay.textContent = `Temps restant : ${timeLeft}s`;
-
-      clearInterval(timer);
-      timer = setInterval(() => {
-          timeLeft--;
-          timerDisplay.textContent = `Temps restant : ${timeLeft}s`;
-
-          if (timeLeft <= 0) {
-              clearInterval(timer);
-              currentQuestionIndex++;
-              if (currentQuestionIndex < questions.length) {
-                  displayQuestion(questions, level, category);
-              } else {
-                  showResults(questions.length);
-              }
+      
+      if (timeLeft <= 0) {
+          clearInterval(timer); // Arrêter le timer
+          alert('Temps écoulé ! Passons à la question suivante.');
+          currentQuestionIndex++; // Passer à la question suivante
+          if (currentQuestionIndex < questions.length) {
+              displayQuestion(questions, level, category);
+          } else {
+              showResults(questions.length); // Afficher les résultats si toutes les questions ont été répondues
           }
-      }, 1000);
-
-      const existingBackToCategoriesButton = document.querySelector('.back-to-categories-button');
-      if (existingBackToCategoriesButton) {
-          existingBackToCategoriesButton.remove();
       }
+  }, 1000); // Mettre à jour toutes les secondes
 
-      const backToCategoriesButton = document.createElement('button');
-      backToCategoriesButton.classList.add('back-to-categories-button');
-      backToCategoriesButton.textContent = 'Retourner aux catégories';
-      backToCategoriesButton.addEventListener('click', () => {
-          document.querySelector('.categories-section').style.display = 'block';
-          document.querySelector('.hidden').style.display = 'none';
-      });
-
-      quizContainer.appendChild(backToCategoriesButton);
+  // Vérifiez si un bouton "Retourner aux catégories" existe déjà
+  const existingBackToCategoriesButton = document.querySelector('.back-to-categories-button');
+  if (existingBackToCategoriesButton) {
+      // Si c'est le cas, supprimez-le
+      existingBackToCategoriesButton.remove();
   }
 
-  function disableResponseButtons(responsesDiv) {
-      const buttons = responsesDiv.querySelectorAll('.rep');
-      buttons.forEach(button => {
-          button.disabled = true;
-      });
+  // Ajouter un bouton pour revenir à la catégorie
+  const backToCategoriesButton = document.createElement('button');
+  backToCategoriesButton.classList.add('back-to-categories-button');
+  backToCategoriesButton.textContent = 'Retourner aux catégories';
+  backToCategoriesButton.addEventListener('click', () => {
+      document.querySelector('.categories-section').style.display = 'block'; // Afficher la section des catégories
+      document.querySelector('.hidden').style.display = 'none'; // Masquer la section du quiz
+  });
+
+  quizContainer.appendChild(backToCategoriesButton); // Ajouter le bouton au conteneur du quiz
+}
+
+// Fonction pour désactiver tous les boutons de réponse
+function disableResponseButtons(responsesDiv) {
+  const buttons = responsesDiv.querySelectorAll('.rep');
+  buttons.forEach(button => {
+      button.disabled = true; // Désactiver chaque bouton
+  });
+}
+
+function checkAnswer(level, category, questionIndex, selectedOptionIndex) {
+  const questions = storedQuizQuestionsJSON.find(q => q.level === level).categories[category];
+  const question = questions[questionIndex];
+
+  // Vérifiez si la réponse est correcte
+  if (question.answer === question.options[selectedOptionIndex]) {
+      score++;
   }
 
-  function checkAnswer(level, category, questionIndex, selectedOptionIndex) {
-      const questions = storedQuizQuestionsJSON.find(q => q.level === level).categories[category];
-      const question = questions[questionIndex];
+  // Passer à la question suivante
+  currentQuestionIndex++;
+  if (currentQuestionIndex < questions.length) {
+      displayQuestion(questions, level, category);
+  } else {
+      showResults(questions.length); // Afficher les résultats si toutes les questions ont été répondues
+  }
+}
 
-      if (question.answer === selectedOptionIndex) {
-          score++;
-      }
+function showResults(totalQuestions) {
+  const resultContainer = document.querySelector('.resultat-container');
+  resultContainer.innerHTML = ''; // Clear previous results
 
-      currentQuestionIndex++;
-      if (currentQuestionIndex < questions.length) {
-          displayQuestion(questions, level, category);
-      } else {
-          showResults(questions.length);
-      }
+  // Affiche le score
+  const resultMessage = document.createElement('p');
+  resultMessage.textContent = `Votre score est ${score} sur ${totalQuestions}.`;
+  
+  // Vérifie si le score est valide
+  if (score === totalQuestions) {
+      resultMessage.textContent += " C'est valide !";
+  } else {
+      resultMessage.textContent += " Ce n'est pas valide.";
   }
 
-  function showResults(totalQuestions) {
-      const resultContainer = document.querySelector('.resultat-container');
+  resultContainer.appendChild(resultMessage);
+
+  // Afficher la section des résultats
+  resultContainer.style.display = 'block';
+
+  // Bouton pour recommencer le quiz
+  const restartButton = document.createElement('button');
+  restartButton.textContent = 'Recommencer le quiz';
+  restartButton.addEventListener('click', () => {
+      // Réinitialiser l'affichage des sections de catégories
+      document.querySelector('.categories-section').style.display = 'block';
+      
+      // Masquer la section du quiz
+      document.querySelector('.hidden').style.display = 'none';
+
+      // Réinitialiser la section des résultats
+      resultContainer.style.display = 'none';
       resultContainer.innerHTML = '';
 
-      const resultMessage = document.createElement('p');
-      resultMessage.textContent = `Votre score est ${score} sur ${totalQuestions}.`;
+      // Réinitialiser les variables pour un nouveau quiz
+      currentQuestionIndex = 0;
+      score = 0;
+  });
 
-      const userData = JSON.parse(localStorage.getItem(userKey));
-      if (score > userData.score) {
-          userData.score = score; // Update score if it's higher
-          localStorage.setItem(userKey, JSON.stringify(userData));
-          resultMessage.textContent += " Nouveau score enregistré!";
-      } else {
-          resultMessage.textContent += " Ce n'est pas valide.";
-      }
+  resultContainer.appendChild(restartButton);
+}
 
-      resultContainer.appendChild(resultMessage);
-      resultContainer.style.display = 'block';
 
-      const restartButton = document.createElement('button');
-      restartButton.textContent = 'Recommencer le quiz';
-      restartButton.addEventListener('click', () => {
-          document.querySelector('.categories-section').style.display = 'block';
-          document.querySelector('.hidden').style.display = 'none';
-          resultContainer.style.display = 'none';
-          resultContainer.innerHTML = '';
-          currentQuestionIndex = 0;
-          score = 0;
-      });
 
-      resultContainer.appendChild(restartButton);
-  }
-});
-});  
 
-//*******************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
