@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Document</title>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="images/Sans_titre-removebg-preview.png" style="height: 50px;" alt="">
+        </div>  
+    </header>
+    
+    <section class="section1">
+        <div class="information">
+            <div class="information2">
+                <div class="info">
+                    <h2>Notre Mission</h2>
+                    <p>Promouvoir l'excellence dans l'enseignement du français et faciliter son apprentissage à travers des outils pédagogiques innovants et des méthodes d'évaluation rigoureuses.</p>
+                </div>
+                <div class="info">
+                    <h2>Notre Expertise</h2>
+                    <p>Une équipe de professionnels qualifiés et passionnés, des méthodes pédagogiques modernes et une expérience reconnue dans la certification linguistique.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section des niveaux affichée par défaut -->
+    <section class="niveaux-section" style="display: block;"> 
+        <h2>Choisissez un niveau</h2>
+        <div class="niveaux-container">
+            <!-- Création manuelle des niveaux -->
+            <div class="niveau">
+                <button class="niveau-button" data-level="A1">Niveau A1</button>
+            </div>
+            <div class="niveau">
+                <button class="niveau-button" data-level="A2">Niveau A2</button>
+            </div>
+            <div class="niveau">
+                <button class="niveau-button" data-level="B1">Niveau B1</button>
+            </div>
+            <div class="niveau">
+                <button class="niveau-button" data-level="B2">Niveau B2</button>
+            </div>
+            <div class="niveau">
+                <button class="niveau-button" data-level="C1" >Niveau C1</button>
+            </div>
+            <div class="niveau">
+                <button class="niveau-button" data-level="C2">Niveau C2</button>
+            </div>
+        </div>
+    </section>
+    <section class="categories-section" style="display: none;">
+        <h2>Choisissez une catégorie</h2>
+        <div class="categories-container">
+            <!-- Les catégories seront ajoutées ici dynamiquement -->
+        </div>
+    </section>
+
+    <div class="hidden" style="display: none;">
+        <div class="timer-container">
+            <div class="timer-display"></div>
+        </div>
+        <div class="listquiz">
+            <div class="qst">
+                <p></p>
+            </div>
+            <div class="reponses">
+                <button class="rep">
+                    <p></p>
+                </button>
+                <button class="rep">
+                    <p></p>
+                </button>
+                <button class="rep">
+                    <p></p>
+                </button>
+                <button class="rep">
+                    <p></p>
+                </button>
+            </div>
+          
+        </div>
+    </div>
+
+    <div class="resultat-container" style="display: none;"></div>
+    <script src="js/script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</body>
+</html>
