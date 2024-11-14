@@ -43,13 +43,66 @@
                     return;
                 }
         
+                // Check username already exists f local storage
                 const existingId = localStorage.getItem(username);
         
                 if (existingId) {
                     window.location.href = "index.html";
                 } else {
+                    // generate id
                     const randId = Math.floor(100000 + Math.random() * 900000);
-                    localStorage.setItem(username, randId);
+
+                    const user = {
+                        id: randId,
+                        name: username,
+                        status: "user",
+                        levels: {
+                            A1: { categories: {
+                                 grammaire: { validation: false, attempts: 0, time: 0}, 
+                                 vocabulaire: { validation: false, attempts: 0, time: 0}, 
+                                 comprehension: {validation: false, attempts: 0, time: 0} 
+                                } 
+                            },
+                            
+                            A2: { categories: {
+                                 grammaire: { validation: false, attempts: 0, time: 0}, 
+                                 vocabulaire: { validation: false, attempts: 0, time: 0}, 
+                                 comprehension: {validation: false, attempts: 0, time: 0} 
+                                } 
+                            },
+
+                            B1: { categories: {
+                                 grammaire: { validation: false, attempts: 0, time: 0}, 
+                                 vocabulaire: { validation: false, attempts: 0, time: 0}, 
+                                 comprehension: {validation: false, attempts: 0, time: 0} 
+                                } 
+                            },
+
+                            B2: { categories: {
+                                 grammaire: { validation: false, attempts: 0, time: 0}, 
+                                 vocabulaire: { validation: false, attempts: 0, time: 0}, 
+                                 comprehension: {validation: false, attempts: 0, time: 0} 
+                                } 
+                            },
+
+                            C1: { categories: {
+                                 grammaire: { validation: false, attempts: 0, time: 0}, 
+                                 vocabulaire: { validation: false, attempts: 0, time: 0}, 
+                                 comprehension: {validation: false, attempts: 0, time: 0} 
+                                } 
+                            },
+
+                            C2: { categories: {
+                                 grammaire: { validation: false, attempts: 0, time: 0}, 
+                                 vocabulaire: { validation: false, attempts: 0, time: 0}, 
+                                 comprehension: {validation: false, attempts: 0, time: 0} 
+                                } 
+                            }
+                        }
+                    };
+
+                    localStorage.setItem(username, JSON.stringify(user));
+
                     window.location.href = "index.html";
                 }
             });

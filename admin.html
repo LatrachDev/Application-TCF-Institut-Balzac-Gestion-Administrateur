@@ -10,18 +10,15 @@
         <script src="/js/tailwind.js"></script>
     </head>
     <body class="bg-gradient-to-b from-blue-600 to-sky-100 w-full h-screen flex flex-col justify-center items-center">
+        
         <header class="absolute top-0 mt-5">
             <a href="login.html"><img class="w-28" src="Images/Balzac-logo.png" alt="Balzac-logo"></a>
         </header>
 
-        <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm p-8 rounded-lg w-72 shadow-lg text-center md:w-96">
-            
+        <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm p-8 rounded-lg w-72 shadow-lg text-center md:w-96"> 
             <h2 class="text-center text-2xl font-bold text-white uppercase mb-6">Admin Login</h2>
-            
             <hr class="border-t border-white mb-6">
-
             <form id="adminLoginForm" class="space-y-4">
-
                 <div>
                     <input placeholder="username" type="text" id="username" class="w-full p-3 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
                 </div>
@@ -33,14 +30,12 @@
                 <button type="submit" class="w-full bg-blue-500 text-white font-bold py-2 rounded-lg hover:bg-blue-600">Login</button>
                 
                 <p id="errorMessage" class="text-red-500 text-center mt-4 hidden">Invalid username or password</p>
-            
             </form>
-
         </div>
         
         <script>
             document.getElementById('adminLoginForm').addEventListener('submit', function(event) {
-                event.preventDefault(); // Prevent form submission
+                event.preventDefault();
 
                 const username = document.getElementById('username').value;
                 const password = document.getElementById('password').value;
