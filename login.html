@@ -1,56 +1,218 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="Participez au quiz TCF pour tester vos connaissances en français. Découvrez votre niveau de maîtrise, de A1 à C2, et progressez avec l'Institut Balzac.">
-        <meta name="keywords" content="Quiz TCF, test de français, niveau de français, évaluation de langue, Institut Balzac, test TCF, niveau A1 C2, apprendre français">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Login page</title>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Participez au quiz TCF pour tester vos connaissances en français. Découvrez votre niveau de maîtrise, de A1 à C2, et progressez avec l'Institut Balzac.">
+    <meta name="keywords" content="Quiz TCF, test de français, niveau de français, évaluation de langue, Institut Balzac, test TCF, niveau A1 C2, apprendre français">
+    <title>Quiz TCF Français - Connexion | Institut Balzac</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .error-shake {
+            animation: shake 0.5s;
+        }
         
-        <!-- <title>Quiz TCF Français - Testez et Évaluez Votre Niveau de Langue | Institut Balzac</title> -->
-        <script src="/js/tailwind.js"></script>
-    </head>
-    <body class="bg-gradient-to-b from-blue-600 to-sky-100 w-full h-screen flex flex-col justify-center items-center">
-        <header class="absolute top-0 mt-5">
-            <a href="admin.html"><img class="w-28" src="Images/Balzac-logo.png" alt="Balzac-logo"></a>
-        </header>
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
 
-        <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm p-8 rounded-lg w-72 shadow-lg text-center md:w-96">
-            <h1 class="text-3xl font-bold text-white mb-4 uppercase">Welcome</h1>
-            <hr class="border-t border-white mb-6">
-        
-            <div class="mb-4">
-                <input type="text" id="username" placeholder="Username" class="w-full p-3 rounded-lg text-gray-700 bg-white bg-opacity-80 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        .input-focus {
+            transition: all 0.3s ease;
+        }
+
+        .input-focus:focus {
+            transform: scale(1.02);
+        }
+
+        .bg-gradient {
+            background: linear-gradient(to bottom, #007BFF, #E0F7FA);
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hover-scale {
+            transition: transform 0.3s ease;
+        }
+
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+
+        /* Styles pour mobile */
+        @media (max-width: 640px) {
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+            
+            .text-3xl {
+                font-size: 1.5rem;
+            }
+
+            .w-72 {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient min-h-screen flex flex-col justify-center items-center">
+    <header class="absolute top-0 mt-5">
+        <a href="admin.html" class="transition-transform duration-300 hover:scale-110">
+            <img class="w-28" src="images/logo.png" alt="Logo Institut Balzac">
+        </a>
+    </header>
+
+    <div class="glass-effect p-8 rounded-lg w-72 shadow-lg text-center md:w-96 hover-scale">
+        <h1 class="text-3xl font-bold text-white mb-4 uppercase">Bienvenue</h1>
+        <hr class="border-t border-white opacity-30 mb-6">
+    
+        <form id="loginForm" class="space-y-4">
+            <div class="relative">
+                <input 
+                    type="text" 
+                    id="username" 
+                    placeholder="Nom d'utilisateur" 
+                    class="w-full p-3 rounded-lg bg-white bg-opacity-20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-focus"
+                    required
+                    minlength="3"
+                    maxlength="20"
+                    pattern="[a-zA-Z0-9]+"
+                    autocomplete="username"
+                >
             </div>
         
-            <p id="error" class="text-red-500 text-sm mb-4 hidden">User already exists</p>
+            <p id="error" class="text-red-400 text-sm mb-4 hidden"></p>
         
-            <button id="btnContinue" class="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg duration-300 hover:bg-blue-700">Continue</button>
-        </div>
-        
-        <script>
+            <button 
+                type="submit" 
+                id="btnContinue" 
+                class="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg transition-all duration-300 hover:bg-blue-700 hover:shadow-lg transform hover:-translate-y-1"
+            >
+                Continuer
+            </button>
+        </form>
+
+        <p class="mt-4 text-white text-sm opacity-80">
+            En continuant, vous acceptez nos 
+            <a href="#" class="underline hover:text-blue-200 transition-colors duration-300">conditions d'utilisation</a>
+        </p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
             const error = document.getElementById("error");
             const btnContinue = document.getElementById("btnContinue");
             const usernameInput = document.getElementById("username");
-        
-            btnContinue.addEventListener("click", () => {
+            const loginForm = document.getElementById("loginForm");
 
+            // Vérifier si l'utilisateur est déjà connecté
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                window.location.href = 'index.html';
+            }
+
+            function showError(message) {
+                error.textContent = message;
+                error.classList.remove("hidden");
+                document.querySelector('.glass-effect').classList.add('error-shake');
+                setTimeout(() => {
+                    document.querySelector('.glass-effect').classList.remove('error-shake');
+                }, 500);
+            }
+
+            loginForm.addEventListener("submit", (e) => {
+                e.preventDefault();
                 const username = usernameInput.value.trim();
-        
+
                 if (username === "") {
-                    error.textContent = "Please enter a username.";
-                    error.classList.remove("hidden");
+                    showError("Veuillez entrer un nom d'utilisateur.");
                     return;
                 }
-        
-                const existingId = localStorage.getItem(username);
-        
-                if (existingId) {
+
+                if (username.length < 3) {
+                    showError("Le nom d'utilisateur doit contenir au moins 3 caractères.");
+                    return;
+                }
+
+                if (!/^[a-zA-Z0-9]+$/.test(username)) {
+                    showError("Le nom d'utilisateur ne doit contenir que des lettres et des chiffres.");
+                    return;
+                }
+
+                // Vérifier si l'utilisateur existe déjà
+                const existingUser = localStorage.getItem(username);
+
+                if (existingUser) {
+                    // Connexion d'un utilisateur existant
+                    localStorage.setItem('currentUser', username);
                     window.location.href = "index.html";
                 } else {
-                    const randId = Math.floor(100000 + Math.random() * 900000);
-                    localStorage.setItem(username, randId);
+                    // Création d'un nouvel utilisateur
+                    const user = {
+                        id: Math.floor(100000 + Math.random() * 900000),
+                        name: username,
+                        status: "user",
+                        currentLevel: "A1",
+                        levels: {
+                            A1: { 
+                                completed: false,
+                                categories: { 
+                                    grammaire: { validation: false, attempts: 0, time: 0, score: 0, bestScore: 0 }, 
+                                    vocabulaire: { validation: false, attempts: 0, time: 0, score: 0, bestScore: 0 }, 
+                                    comprehension: { validation: false, attempts: 0, time: 0, score: 0, bestScore: 0 } 
+                                }
+                            },
+                            A2: { 
+                                completed: false,
+                                categories: { 
+                                    grammaire: { validation: false, attempts: 0, time: 0, score: 0, bestScore: 0 }, 
+                                    vocabulaire: { validation: false, attempts: 0, time: 0, score: 0, bestScore: 0 }, 
+                                    comprehension: { validation: false, attempts: 0, time: 0, score: 0, bestScore: 0 } 
+                                }
+                            },
+                            B1: { 
+                                completed: false,
+                                categories: { 
+                                    grammaire: { validation: false, attempts: 0, time: 0, score: 0, bestScore: 0 }, 
+                                    vocabulaire: { validation: false, attempts: 0, time: 0, score: 0, bestScore: 0 }, 
+                                    comprehension: { validation: false, attempts: 0, time: 0, score: 0, bestScore: 0 } 
+                                }
+                            },
+                            B2: { 
+                                completed: false,
+                                categories: { 
+                                    grammaire: { validation: false, attempts: 0, time: 0, score: 0, bestScore: 0 }, 
+                                    vocabulaire: { validation: false, attempts: 0, time: 0, score: 0, bestScore: 0 }, 
+                                    comprehension: { validation: false, attempts: 0, time: 0, score: 0, bestScore: 0 } 
+                                }
+                            },
+                            C1: { 
+                                completed: false,
+                                categories: { 
+                                    grammaire: { validation: false, attempts: 0, time: 0, score: 0, bestScore: 0 }, 
+                                    vocabulaire: { validation: false, attempts: 0, time: 0, score: 0, bestScore: 0 }, 
+                                    comprehension: { validation: false, attempts: 0, time: 0, score: 0, bestScore: 0 } 
+                                }
+                            },
+                            C2: { 
+                                completed: false,
+                                categories: { 
+                                    grammaire: { validation: false, attempts: 0, time: 0, score: 0, bestScore: 0 }, 
+                                    vocabulaire: { validation: false, attempts: 0, time: 0, score: 0, bestScore: 0 }, 
+                                    comprehension: { validation: false, attempts: 0, time: 0, score: 0, bestScore: 0 } 
+                                }
+                            }
+                        }
+                    };
+
+                    localStorage.setItem(username, JSON.stringify(user));
+                    localStorage.setItem('currentUser', username);
                     window.location.href = "index.html";
                 }
             });
@@ -58,6 +220,15 @@
             usernameInput.addEventListener("input", () => {
                 error.classList.add("hidden");
             });
-        </script>
-    </body>
+
+            // Amélioration de l'expérience utilisateur avec la touche Entrée
+            usernameInput.addEventListener("keypress", (e) => {
+                if (e.key === "Enter") {
+                    e.preventDefault();
+                    btnContinue.click();
+                }
+            });
+        });
+    </script>
+</body>
 </html>
