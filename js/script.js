@@ -1,4 +1,23 @@
 
+
+// Récupération des éléments du DOM
+// Récupération des éléments du DOM
+const niveauxSection = document.querySelector('.niveaux-section');
+const categoriesSection = document.querySelector('.categories-section');
+const categoriesContainer = document.querySelector('.categories-container');
+const quizSection = document.querySelector('.quiz-section');
+const resultatContainer = document.querySelector('.resultat-container');
+const questionCounter = document.querySelector('.question-counter');
+const progressFill = document.querySelector('.progress-fill');
+
+let currentLevel = '';
+let currentCategory = '';
+let currentQuestions = [];
+let currentQuestionIndex = 0;
+let score = 0;
+let timer;
+let timeLeft = 300; // 5 minutes par quiz
+
 const quizQuestions = [
   // Niveau A1
   {
@@ -973,359 +992,324 @@ const quizQuestions = [
       }
     ];
 
-    const quizQuestionsJSON = JSON.stringify(quizQuestions);  
-
-    localStorage.setItem('quizQuestions', quizQuestionsJSON); 
-    
-    const storedQuizQuestionsJSON = JSON.parse(localStorage.getItem('quizQuestions'));
-     
-    let timer; 
-    let currentQuestionIndex = 0; 
-    let score = 0; 
-    let currentLevel = ''; 
-    let currentCategory = ''; 
-
-function loadStoredData() {
-const storedData = JSON.parse(localStorage.getItem('quizData')) || {};
-
-currentLevel = storedData.currentLevel || '';
-
-
-if (currentLevel) {
-    currentCategory = storedData[currentLevel]?.currentCategory || '';
-}
-
-score = storedData[currentLevel]?.[currentCategory]?.score || 0;
-currentQuestionIndex = storedData[currentLevel]?.[currentCategory]?.currentQuestionIndex || 0;
-
-console.log("Niveau actuel:", currentLevel);
-console.log("Catégorie actuelle:", currentCategory);
-console.log("Score:", score);
-console.log("Indice de question actuel:", currentQuestionIndex);
-}
-function saveData() {
-const storedData = JSON.parse(localStorage.getItem('quizData')) || {};
-
-if (!storedData[currentLevel]) {
-    storedData[currentLevel] = {};
-}
-
-if (!storedData[currentLevel][currentCategory]) {
-    storedData[currentLevel][currentCategory] = {};
-}
-
-storedData[currentLevel][currentCategory] = {
-    score: score,
-    currentQuestionIndex: currentQuestionIndex
-};
-
-
-storedData.currentLevel = currentLevel;
-storedData.currentCategory = currentCategory; 
-
-localStorage.setItem('quizData', JSON.stringify(storedData));
-}
-
-document.querySelectorAll('.niveau-button').forEach(button => {
-button.addEventListener('click', () => {
-    const level = button.getAttribute('data-level');
-    currentLevel = level; 
-    showCategories(level); 
-});
-});
-
-  function showCategories(level) {
-    currentLevel = level;
-    const categoriesSection = document.querySelector('.categories-section');
-    const categoriesContainer = categoriesSection.querySelector('.categories-container');
-    categoriesContainer.innerHTML = ''; 
-
-    const levelData = storedQuizQuestionsJSON.find(q => q.level === level);
-    if (levelData) {
-        Object.keys(levelData.categories).forEach(category => {
-            const categoryDiv = document.createElement('div');
-            categoryDiv.classList.add('category');
-
-            const categoryButton = document.createElement('button');
-            categoryButton.textContent = category.charAt(0).toUpperCase() + category.slice(1);
-            categoryButton.addEventListener('click', () => showQuiz(level, category));
-
-            categoryDiv.appendChild(categoryButton);
-            categoriesContainer.appendChild(categoryDiv);
-        });
+// Vérifier si l'utilisateur est connecté
+function checkUserAuth() {
+    const username = localStorage.getItem('currentUser');
+    if (!username) {
+        window.location.href = 'login.html';
+        return false;
     }
+    return username;
+}
 
-    const backToLevelsButton = document.createElement('button');
-    backToLevelsButton.textContent = 'Retourner aux niveaux';
-    backToLevelsButton.addEventListener('click', () => {
-        document.querySelector('.niveaux-section').style.display = 'block';x
-        categoriesSection.style.display = 'none'; 
+// Initialisation de l'application
+function initApp() {
+    const username = checkUserAuth();
+    if (!username) return;
+
+    displayUsername();
+    updateLevelButtons();
+
+    // Ajout des événements sur les boutons de niveau
+    document.querySelectorAll('.niveau-button').forEach(button => {
+        button.addEventListener('click', () => handleLevelSelection(button.dataset.level));
     });
 
-    categoriesContainer.appendChild(backToLevelsButton); 
-
-    
-    document.querySelector('.niveaux-section').style.display = 'none';
-    categoriesSection.style.display = 'block';
-}
-
-
-  function showQuiz(level, category) {
-    currentCategory = category;
-    const levelData = storedQuizQuestionsJSON.find(q => q.level === level);
-    const questions = levelData.categories[category];
-
-    currentQuestionIndex = 0; 
-    score = 0;
-
-    const quizContainer = document.querySelector('.listquiz');
-    quizContainer.innerHTML = '';
-
-
-    document.querySelector('.niveaux-section').style.display = 'none';
-    document.querySelector('.categories-section').style.display = 'none';
-
-    const backToCategoriesButton = document.createElement('button');
-    backToCategoriesButton.textContent = 'Retourner aux catégories';
-    backToCategoriesButton.addEventListener('click', () => {
-        document.querySelector('.categories-section').style.display = 'block'; 
-        document.querySelector('.hidden').style.display = 'none'; 
+    // Ajout des événements sur les boutons de catégorie
+    document.querySelectorAll('.category-button').forEach(button => {
+        button.addEventListener('click', () => startQuiz(button.dataset.category));
     });
+}
+
+// Afficher le nom d'utilisateur
+function displayUsername() {
+    const username = localStorage.getItem('currentUser');
+    const userData = JSON.parse(localStorage.getItem(username));
+    const usernameDisplay = document.getElementById('username-display');
+    const currentLevelDisplay = document.getElementById('current-level');
     
-    quizContainer.appendChild(backToCategoriesButton); 
-
-    displayQuestion(questions, level, category);
-
-
-    document.querySelector('.hidden').style.display = 'block';
+    if (usernameDisplay && username) {
+        usernameDisplay.textContent = username;
+    }
+    if (currentLevelDisplay && userData) {
+        currentLevelDisplay.textContent = `Niveau actuel : ${userData.currentLevel}`;
+    }
 }
 
-function displayQuestion(questions, level, category) {
-  const quizContainer = document.querySelector('.listquiz');
-  quizContainer.innerHTML = ''; 
-
-  const question = questions[currentQuestionIndex];
-
-  const questionDiv = document.createElement('div');
-  questionDiv.classList.add('qst');
-  questionDiv.innerHTML = `<p>${currentQuestionIndex + 1}. ${question.question}</p>`;
-
-  const responsesDiv = document.createElement('div');
-  responsesDiv.classList.add('reponses');
-
-  question.options.forEach((option, i) => {
-      const responseButton = document.createElement('button');
-      responseButton.classList.add('rep');
-      responseButton.innerHTML = `<p>${option}</p>`;
-
-      responseButton.addEventListener('click', () => {
-          console.log(`Button clicked: ${option}`); 
-          checkAnswer(level, category, currentQuestionIndex, i);
-          disableResponseButtons(responsesDiv);
-      });
-      
-      responsesDiv.appendChild(responseButton);
-  });
-
-  quizContainer.appendChild(questionDiv);
-  quizContainer.appendChild(responsesDiv);
-
-
-  const timerDisplay = document.querySelector('.timer-display');
-  let timeLeft = 20; 
-  timerDisplay.textContent = `Temps restant : ${timeLeft}s`;
-
- 
-  clearInterval(timer); 
-  timer = setInterval(() => {
-      timeLeft--;
-      timerDisplay.textContent = `Temps restant : ${timeLeft}s`;
-      
-      if (timeLeft <= 0) {
-          clearInterval(timer);
-          alert('Temps écoulé ! Passons à la question suivante.');
-          currentQuestionIndex++; 
-          if (currentQuestionIndex < questions.length) {
-              displayQuestion(questions, level, category);
-          } else {
-              clearInterval(timer);
-              showResults(questions.length);
-          }
-      }
-  }, 1000); 
-}
-
-
-function disableResponseButtons(responsesDiv) {
-  const buttons = responsesDiv.querySelectorAll('.rep');
-  buttons.forEach(button => {
-      button.disabled = true; 
-  });
-}
-
-function checkAnswer(level, category, questionIndex, selectedOptionIndex) { 
-const questions = storedQuizQuestionsJSON.find(q => q.level === level).categories[category]; 
-const question = questions[questionIndex]; 
-
-if (selectedOptionIndex === question.answer) { 
-    score++; 
-} 
-
-currentQuestionIndex++; 
-saveData(); 
-
-if (currentQuestionIndex < questions.length) { 
-    displayQuestion(questions, level, category); 
-} else { 
-    clearInterval(timer); 
-    showResults(questions.length); 
-} 
-}
-
-
-function showResults(totalQuestions) {
-const resultContainer = document.querySelector('.resultat-container');
-resultContainer.innerHTML = ''; 
-
-
-const resultMessage = document.createElement('p');
-resultContainer.appendChild(resultMessage);
-
-resultMessage.textContent = `Votre score est ${score} sur ${totalQuestions}.`;
-
-
-if (score === totalQuestions) {
-    resultMessage.textContent += " Bravo ! Vous avez obtenu un score parfait de 10/10 ! ";
-
-    levelScores[currentLevel][currentCategory] = 10;
-    unlockNextLevel(currentLevel); 
+// Mettre à jour les boutons de niveau
+function updateLevelButtons() {
+    const username = localStorage.getItem('currentUser');
+    const userData = JSON.parse(localStorage.getItem(username));
     
-
-    const categoryButtons = document.querySelectorAll('.category button');
-    categoryButtons.forEach(button => {
-        if (button.textContent.includes(currentCategory)) {
-            button.classList.add('valid-category'); 
+    document.querySelectorAll('.niveau-button').forEach(button => {
+        const level = button.dataset.level;
+        const isAccessible = isLevelAccessible(level, userData);
+        
+        button.disabled = !isAccessible;
+        button.style.opacity = isAccessible ? '1' : '0.5';
+        
+        const progressBar = document.getElementById(`progress-${level}`);
+        if (progressBar) {
+            const progress = calculateLevelProgress(userData, level);
+            progressBar.style.width = `${progress}%`;
+            progressBar.style.backgroundColor = progress === 100 ? '#28a745' : '#007bff';
         }
     });
-} else {
-    resultMessage.textContent += " Ce n'est pas valide. ";
 }
 
-resultContainer.appendChild(resultMessage);
+
+function isLevelAccessible(level, userData) {
+    const levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+    const levelIndex = levels.indexOf(level);
+    
+    if (levelIndex === 0) return true;
+    
+    const previousLevel = levels[levelIndex - 1];
+    return userData.levels[previousLevel].completed;
+}
 
 
-resultContainer.style.display = 'block';
+function calculateLevelProgress(userData, level) {
+    const categories = userData.levels[level].categories;
+    const totalValidations = Object.values(categories).filter(cat => cat.validation).length;
+    return (totalValidations / 3) * 100;
+}
 
-const restartButton = document.createElement('button');
-restartButton.textContent = 'Recommencer le quiz';
-restartButton.addEventListener('click', () => {
 
-    document.querySelector('.categories-section').style.display = 'block';
+function handleLevelSelection(level) {
+    currentLevel = level;
+    niveauxSection.style.display = 'none';
+    categoriesSection.style.display = 'block';
+    updateCategoryProgress();
+}
 
-    document.querySelector('.hidden').style.display = 'none';
 
-    resultContainer.style.display = 'none';
-    resultContainer.innerHTML = '';
+function updateCategoryProgress() {
+    const username = localStorage.getItem('currentUser');
+    const userData = JSON.parse(localStorage.getItem(username));
+    
+    Object.keys(userData.levels[currentLevel].categories).forEach(category => {
+        const progressBar = document.querySelector(`#progress-${category}`);
+        if (progressBar) {
+            const categoryData = userData.levels[currentLevel].categories[category];
+            const progress = (categoryData.bestScore || 0) * 10;
+            progressBar.style.width = `${progress}%`;
+            progressBar.style.backgroundColor = categoryData.validation ? '#28a745' : '#007bff';
+        }
+    });
+}
 
+
+function getQuestions(level, category) {
+    const levelData = quizQuestions.find(q => q.level === level);
+    if (!levelData) return [];
+
+    const categoryQuestions = levelData.categories[category];
+    if (!categoryQuestions) return [];
+
+    return [...categoryQuestions].sort(() => Math.random() - 0.5).slice(0, 10);
+}
+
+
+function startQuiz(category) {
+    currentCategory = category;
+    currentQuestions = getQuestions(currentLevel, category);
     currentQuestionIndex = 0;
     score = 0;
-});
-
-resultContainer.appendChild(restartButton);
-}
-
-
-
-const levelScores = {
-A1: { grammaire: 0, vocabulaire: 0, comprehension: 0 },
-A2: { grammaire: 0, vocabulaire: 0, comprehension: 0 },
-B1: { grammaire: 0, vocabulaire: 0, comprehension: 0 },
-B2: { grammaire: 0, vocabulaire: 0, comprehension: 0 },
-C1: { grammaire: 0, vocabulaire: 0, comprehension: 0 },
-C2: { grammaire: 0, vocabulaire: 0, comprehension: 0 }
-};
-
-const unlockedLevels = ["A1"]; 
-
-function showLevels() {
-const levelsContainer = document.querySelector('.niveaux-container');
-levelsContainer.innerHTML = '';
-
-
-const levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
-levels.forEach(level => {
-    if (unlockedLevels.includes(level)) {
-        const levelDiv = document.createElement('div');
-        levelDiv.classList.add('niveau');
-
-        const levelButton = document.createElement('button');
-        levelButton.classList.add('niveau-button');
-        levelButton.setAttribute('data-level', level);
-        levelButton.textContent = `Niveau ${level}`;
-        levelButton.addEventListener('click', () => {
-            showCategories(level);
-        });
-
-        levelDiv.appendChild(levelButton);
-        levelsContainer.appendChild(levelDiv);
-    }
-});
-}
-
-function restartQuiz() {
-currentQuestionIndex = 0; 
-score = 0; 
-saveData();
-}
-
-
-function unlockNextLevel(currentLevel) { 
-const levelData = storedQuizQuestionsJSON.find(q => q.level === currentLevel); 
-const categories = Object.keys(levelData.categories); 
-let allCategoriesUnlocked = true; 
-
-categories.forEach(category => { 
-    if (levelScores[currentLevel][category] < 10) { 
-        allCategoriesUnlocked = false; 
-    } 
-}); 
-
-if (allCategoriesUnlocked) { 
-    const nextLevelIndex = Object.keys(levelScores).indexOf(currentLevel) + 1; 
-    const nextLevel = Object.keys(levelScores)[nextLevelIndex]; 
-    if (nextLevel && !unlockedLevels.includes(nextLevel)) { 
-        unlockedLevels.push(nextLevel); 
-        saveData(); 
-        alert(`Le niveau ${nextLevel} est maintenant débloqué !`); 
-        showLevels(); 
-    } 
-} 
-}
-
-
-document.addEventListener('DOMContentLoaded', () => { 
-loadStoredData(); 
-showLevels(); 
-});
-
-
-
-if (currentQuestionIndex >= totalQuestions) {
-showResults(totalQuestions);
-}
-
-function restartQuiz() {
-currentQuestionIndex = 0; 
-score = 0; 
-saveData(); 
-}
-
-function initializeData() {
-const initialData = {
-    currentLevel: '',
-    currentCategory: '',
-    A1: { grammaire: { score: 0, currentQuestionIndex: 0 }, vocabulaire: { score: 0, currentQuestionIndex: 0 }, comprehension: { score: 0, currentQuestionIndex: 0 } },
+    timeLeft = 300;
     
-};
-localStorage.setItem('quizData', JSON.stringify(initialData));
+    categoriesSection.style.display = 'none';
+    quizSection.style.display = 'block';
+    
+    updateQuizHeader();
+    startTimer();
+    displayQuestion();
 }
+
+
+function updateQuizHeader() {
+    const levelDisplay = document.querySelector('.current-level-display');
+    const categoryDisplay = document.querySelector('.current-category-display');
+    
+    if (levelDisplay) levelDisplay.textContent = `Niveau ${currentLevel}`;
+    if (categoryDisplay) categoryDisplay.textContent = currentCategory;
+}
+
+
+function startTimer() {
+    const timerDisplay = document.querySelector('.timer-display');
+    
+    clearInterval(timer);
+    timer = setInterval(() => {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        
+        timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        
+        if (timeLeft === 0) {
+            endQuiz();
+        }
+        
+        timeLeft--;
+    }, 1000);
+}
+
+
+function displayQuestion() {
+    if (!currentQuestions || currentQuestionIndex >= currentQuestions.length) {
+        endQuiz();
+        return;
+    }
+
+    const question = currentQuestions[currentQuestionIndex];
+    const questionElement = document.querySelector('.qst p');
+    const optionButtons = document.querySelectorAll('.rep');
+    
+    questionCounter.textContent = `Question ${currentQuestionIndex + 1}/10`;
+    progressFill.style.width = `${(currentQuestionIndex + 1) * 10}%`;
+    
+    questionElement.textContent = question.question;
+    
+    optionButtons.forEach((button, index) => {
+        button.querySelector('p').textContent = question.options[index];
+        button.className = 'rep';
+        button.onclick = () => checkAnswer(index);
+    });
+}
+
+
+function checkAnswer(answerIndex) {
+    const question = currentQuestions[currentQuestionIndex];
+    const isCorrect = answerIndex === question.answer;
+    const buttons = document.querySelectorAll('.rep');
+    
+    buttons.forEach(button => button.onclick = null);
+    
+    buttons[question.answer].classList.add('correct');
+    if (!isCorrect) {
+        buttons[answerIndex].classList.add('incorrect');
+    } else {
+        score++;
+    }
+    
+    setTimeout(() => {
+        currentQuestionIndex++;
+        displayQuestion();
+    }, 1000);
+}
+
+
+function endQuiz() {
+    clearInterval(timer);
+    
+    const username = localStorage.getItem('currentUser');
+    const userData = JSON.parse(localStorage.getItem(username));
+    const timeUsed = 300 - timeLeft;
+    
+    const categoryData = userData.levels[currentLevel].categories[currentCategory];
+    categoryData.attempts = (categoryData.attempts || 0) + 1;
+    categoryData.time = Math.min(categoryData.time || Infinity, timeUsed);
+    categoryData.score = score;
+    categoryData.bestScore = Math.max(categoryData.bestScore || 0, score);
+    categoryData.validation = score === 10;
+    
+    if (checkLevelCompletion(userData, currentLevel)) {
+        showLevelCompletionMessage();
+    }
+    
+    localStorage.setItem(username, JSON.stringify(userData));
+    displayResults(score, timeUsed, categoryData);
+}
+
+
+function checkLevelCompletion(userData, level) {
+    const categories = userData.levels[level].categories;
+    const isCompleted = Object.values(categories).every(cat => cat.validation);
+    
+    if (isCompleted && !userData.levels[level].completed) {
+        userData.levels[level].completed = true;
+        userData.currentLevel = getNextLevel(level);
+        return true;
+    }
+    
+    return false;
+}
+
+
+function getNextLevel(currentLevel) {
+    const levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+    const currentIndex = levels.indexOf(currentLevel);
+    return currentIndex < levels.length - 1 ? levels[currentIndex + 1] : currentLevel;
+}
+
+
+function displayResults(score, timeUsed, categoryData) {
+    quizSection.style.display = 'none';
+    resultatContainer.style.display = 'block';
+    
+    const bestScoreMessage = categoryData.bestScore < score 
+        ? '<p class="new-record">Nouveau meilleur score !</p>' 
+        : `<p>Meilleur score : ${categoryData.bestScore}/10</p>`;
+        
+    const validationMessage = score === 10 
+        ? '<p class="success">Félicitations ! Vous avez validé cette catégorie !</p>'
+        : '<p class="warning">Il faut obtenir 10/10 pour valider la catégorie.</p>';
+        
+    resultatContainer.innerHTML = `
+        <div class="score">
+            <h2>Quiz terminé !</h2>
+            <p>Score actuel : ${score}/10</p>
+            ${bestScoreMessage}
+            <p>Temps utilisé : ${Math.floor(timeUsed/60)}:${(timeUsed%60).toString().padStart(2, '0')}</p>
+            <p>Nombre de tentatives : ${categoryData.attempts}</p>
+            ${validationMessage}
+            <div class="action-buttons">
+                <button onclick="retourNiveaux()" class="btn-retour">Retour aux niveaux</button>
+                <button onclick="recommencerQuiz()" class="btn-recommencer">Réessayer</button>
+            </div>
+        </div>
+    `;
+}
+
+
+function showLevelCompletionMessage() {
+    const modal = document.createElement('div');
+    modal.className = 'level-completion-modal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h2>Félicitations !</h2>
+            <p>Vous avez complété le niveau ${currentLevel} !</p>
+            <p>Vous pouvez maintenant accéder au niveau suivant.</p>
+            <button onclick="this.parentElement.parentElement.remove()" class="btn-recommencer">Continuer</button>
+        </div>
+    `;
+    document.body.appendChild(modal);
+}
+
+
+function recommencerQuiz() {
+    currentQuestionIndex = 0;
+    score = 0;
+    timeLeft = 300;
+    resultatContainer.style.display = 'none';
+    quizSection.style.display = 'block';
+    startTimer();
+    displayQuestion();
+}
+
+
+function retourNiveaux() {
+    resultatContainer.style.display = 'none';
+    categoriesSection.style.display = 'none';
+    niveauxSection.style.display = 'block';
+    updateLevelButtons();
+}
+
+
+function logout() {
+    localStorage.removeItem('currentUser');
+    window.location.href = 'login.html';
+}
+
+
+document.addEventListener('DOMContentLoaded', initApp);
