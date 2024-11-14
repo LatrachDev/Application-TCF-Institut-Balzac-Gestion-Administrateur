@@ -1009,6 +1009,7 @@ function initApp() {
 
     displayUsername();
     updateLevelButtons();
+    updateTableData();
 
     // Ajout des événements sur les boutons de niveau
     document.querySelectorAll('.niveau-button').forEach(button => {
@@ -1200,25 +1201,36 @@ function checkAnswer(answerIndex) {
 
 
 function endQuiz() {
-    clearInterval(timer);
-    
-    const username = localStorage.getItem('currentUser');
-    const userData = JSON.parse(localStorage.getItem(username));
-    const timeUsed = 300 - timeLeft;
-    
-    const categoryData = userData.levels[currentLevel].categories[currentCategory];
-    categoryData.attempts = (categoryData.attempts || 0) + 1;
-    categoryData.time = Math.min(categoryData.time || Infinity, timeUsed);
-    categoryData.score = score;
-    categoryData.bestScore = Math.max(categoryData.bestScore || 0, score);
-    categoryData.validation = score === 10;
-    
-    if (checkLevelCompletion(userData, currentLevel)) {
-        showLevelCompletionMessage();
-    }
-    
-    localStorage.setItem(username, JSON.stringify(userData));
-    displayResults(score, timeUsed, categoryData);
+  clearInterval(timer);
+  
+  const username = localStorage.getItem('currentUser');
+  const userData = JSON.parse(localStorage.getItem(username));
+  const timeUsed = 300 - timeLeft;
+  
+  // Vérifier si la catégorie existe, sinon l'initialiser
+  if (!userData.levels[currentLevel].categories[currentCategory]) {
+      userData.levels[currentLevel].categories[currentCategory] = {
+          bestScore: 0,
+          attempts: 0,
+          validation: false,
+          time: Infinity
+      };
+  }
+  
+  const categoryData = userData.levels[currentLevel].categories[currentCategory];
+  categoryData.attempts = (categoryData.attempts || 0) + 1;
+  categoryData.time = Math.min(categoryData.time || Infinity, timeUsed);
+  categoryData.score = score;
+  categoryData.bestScore = Math.max(categoryData.bestScore || 0, score);
+  categoryData.validation = score === 10;
+  
+  if (checkLevelCompletion(userData, currentLevel)) {
+      showLevelCompletionMessage();
+  }
+  
+  localStorage.setItem(username, JSON.stringify(userData));
+  displayResults(score, timeUsed, categoryData);
+  updateTableData(); // Assurez-vous que cette fonction est appelée pour mettre à jour le tableau
 }
 
 
@@ -1269,6 +1281,7 @@ function displayResults(score, timeUsed, categoryData) {
             </div>
         </div>
     `;
+    updateTableData();
 }
 
 
@@ -1313,3 +1326,34 @@ function logout() {
 
 
 document.addEventListener('DOMContentLoaded', initApp);
+
+
+//***************************************
+function updateTableData() {
+  const username = localStorage.getItem('currentUser');
+  if (!username) return;
+  
+  const userData = JSON.parse(localStorage.getItem(username));
+  if (!userData) return;
+
+  // Parcourir tous les niveaux
+  ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].forEach(level => {
+      // Parcourir toutes les catégories
+      ['grammaire', 'vocabulaire', 'comprehension'].forEach(category => {
+          const categoryData = userData.levels[level].categories[category];
+          
+          // Mettre à jour le score
+          const scoreElement = document.getElementById(`score-${category}-${level}`);
+          if (scoreElement) {
+              scoreElement.textContent = `${categoryData.bestScore || 0}/10`;
+          }
+          
+          // Mettre à jour les tentatives
+          const attemptsElement = document.getElementById(`attempts-${category}-${level}`);
+          if (attemptsElement) {
+              attemptsElement.textContent = categoryData.attempts || 0;
+          }
+      });
+  });
+}
+
