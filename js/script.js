@@ -1259,6 +1259,7 @@ if (allCategoriesUnlocked) {
 document.addEventListener('DOMContentLoaded', () => {
 
 const storedQuizQuestionsJSON = JSON.parse(localStorage.getItem('quizQuestions'));
+const storedStats = JSON.parse(localStorage.getItem('quizStats'));
 
 
 showLevels();
@@ -1267,13 +1268,22 @@ showLevels();
 
 if (currentQuestionIndex >= totalQuestions) {
 showResults(totalQuestions);
+
+
+
 }
 
 
 
 
 
-// *********************************************************************
+
+
+
+
+
+
+
 
 
 
