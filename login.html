@@ -6,65 +6,13 @@
     <meta name="description" content="Participez au quiz TCF pour tester vos connaissances en français. Découvrez votre niveau de maîtrise, de A1 à C2, et progressez avec l'Institut Balzac.">
     <meta name="keywords" content="Quiz TCF, test de français, niveau de français, évaluation de langue, Institut Balzac, test TCF, niveau A1 C2, apprendre français">
     <title>Quiz TCF Français - Connexion | Institut Balzac</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .error-shake {
-            animation: shake 0.5s;
-        }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-            20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
-
-        .input-focus {
-            transition: all 0.3s ease;
-        }
-
-        .input-focus:focus {
-            transform: scale(1.02);
-        }
-
-        .bg-gradient {
-            background: linear-gradient(to bottom, #007BFF, #E0F7FA);
-        }
-
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .hover-scale {
-            transition: transform 0.3s ease;
-        }
-
-        .hover-scale:hover {
-            transform: scale(1.05);
-        }
-
-        /* Styles pour mobile */
-        @media (max-width: 640px) {
-            .container {
-                width: 90%;
-                padding: 20px;
-            }
-            
-            .text-3xl {
-                font-size: 1.5rem;
-            }
-
-            .w-72 {
-                width: 100%;
-            }
-        }
-    </style>
+    <script src="js/tailwind.js"></script>
+  
 </head>
-<body class="bg-gradient min-h-screen flex flex-col justify-center items-center">
+<body class="bg-gradient-to-b from-blue-600 to-sky-100 w-full h-screen flex flex-col justify-center items-center">
     <header class="absolute top-0 mt-5">
         <a href="admin.html" class="transition-transform duration-300 hover:scale-110">
-            <img class="w-28" src="images/logo.png" alt="Logo Institut Balzac">
+            <img class="w-28" src="images/Balzac-logo.png" alt="Logo Institut Balzac">
         </a>
     </header>
 
@@ -78,7 +26,7 @@
                     type="text" 
                     id="username" 
                     placeholder="Nom d'utilisateur" 
-                    class="w-full p-3 rounded-lg bg-white bg-opacity-20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-focus"
+                    class="w-full p-3 rounded-lg bg-white  text-black placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-focus"
                     required
                     minlength="3"
                     maxlength="20"
@@ -145,15 +93,15 @@
                     return;
                 }
 
-                // Vérifier si l'utilisateur existe déjà
+
                 const existingUser = localStorage.getItem(username);
 
                 if (existingUser) {
-                    // Connexion d'un utilisateur existant
+
                     localStorage.setItem('currentUser', username);
                     window.location.href = "index.html";
                 } else {
-                    // Création d'un nouvel utilisateur
+
                     const user = {
                         id: Math.floor(100000 + Math.random() * 900000),
                         name: username,
@@ -221,7 +169,7 @@
                 error.classList.add("hidden");
             });
 
-            // Amélioration de l'expérience utilisateur avec la touche Entrée
+
             usernameInput.addEventListener("keypress", (e) => {
                 if (e.key === "Enter") {
                     e.preventDefault();
