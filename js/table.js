@@ -80,9 +80,20 @@ function updateScores(userData) {
                 const categoryData = userData.levels[level].categories[category];
                 scoreElement.textContent = `${categoryData.bestScore || 0}/10`;
                 attemptsElement.textContent = categoryData.attempts || 0;
+
+                // Vérifier si l'utilisateur a passé le test
+                if (categoryData.attempts > 0) {
+                    scoreElement.style.color = '#333'; // Couleur normale
+                    attemptsElement.style.color = '#333'; // Couleur normale
+                } else {
+                    scoreElement.style.color = '#999'; // Gris
+                    attemptsElement.style.color = '#999'; // Gris
+                }
             } else {
                 scoreElement.textContent = '-/10';
                 attemptsElement.textContent = '0';
+                scoreElement.style.color = '#999'; // Gris
+                attemptsElement.style.color = '#999'; // Gris
             }
         });
     });
@@ -99,6 +110,8 @@ function resetScores() {
             
             scoreElement.textContent = '-/10';
             attemptsElement.textContent = '0';
+            scoreElement.style.color = '#999'; // Gris
+            attemptsElement.style.color = '#999'; // Gris
         });
     });
 }

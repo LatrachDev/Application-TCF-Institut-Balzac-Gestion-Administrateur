@@ -104,7 +104,7 @@
     padding: 8px;
     text-align: center;
     font-size: 14px;
-    color: #333;
+    color: #0062ff;
 
   }
   
@@ -122,12 +122,7 @@
     margin-top: 50px;
     margin-bottom: 50px;
   }
-  .search{
-    border-radius: 10px ;
-    outline: none;
-    /* cursor: grabbing; */
-    
-  }
+  
 
   td{
     font-size: medium;
@@ -136,7 +131,7 @@
 
   .search {
     padding: 8px 16px;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #000;
     border-radius: 8px;
     margin-right: 16px;
     outline: none;
@@ -175,7 +170,7 @@
 }
 
 .users-list h2 {
-  color: #0062ff;
+  color: #000;
   margin-bottom: 15px;
   text-align: center;
 
@@ -225,6 +220,7 @@
       transform: translateY(0);
   }
 }
+
 
 
   
