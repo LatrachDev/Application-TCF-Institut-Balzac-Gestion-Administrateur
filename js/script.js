@@ -991,9 +991,11 @@ let timer;
 let timeLeft = 60; 
 let timeUsed = 0;
 
+
 function initializeQuestions() {
   // Vérifie si les questions existent déjà dans le localStorage
-  if (!localStorage.getItem('quizQuestions')) {
+  const storedQuestions = localStorage.getItem('quizQuestions');
+  if (!storedQuestions) {
       // Si non, initialise avec les questions par défaut
       localStorage.setItem('quizQuestions', JSON.stringify(quizQuestions));
   }
@@ -1348,3 +1350,130 @@ function logout() {
 
 
 document.addEventListener('DOMContentLoaded', initApp);
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+function updateTableData() {
+  const username = localStorage.getItem('currentUser');
+  if (!username) return;
+  
+  const userData = JSON.parse(localStorage.getItem(username));
+  if (!userData) return;
+
+  // Parcourir tous les niveaux
+  ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].forEach(level => {
+      // Parcourir toutes les catégories
+      ['grammaire', 'vocabulaire', 'comprehension'].forEach(category => {
+          if (userData.levels[level] && 
+              userData.levels[level].categories && 
+              userData.levels[level].categories[category]) {
+              
+              const categoryData = userData.levels[level].categories[category];
+              
+              // Mettre à jour le score
+              const scoreElement = document.getElementById(`score-${category}-${level}`);
+              if (scoreElement) {
+                  scoreElement.textContent = `${categoryData.bestScore || 0}/10`;
+              }
+              
+              // Mettre à jour les tentatives
+              const attemptsElement = document.getElementById(`attempts-${category}-${level}`);
+              if (attemptsElement) {
+                  attemptsElement.textContent = categoryData.attempts || 0;
+              }
+          }
+      });
+  });
+}
+
+function downloadPDF() {
+  // Vérifier si jsPDF est disponible
+  if (typeof window.jspdf === 'undefined') {
+      console.error('jsPDF n\'est pas chargé correctement');
+      return;
+  }
+
+  try {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      
+      // Récupérer les données de l'utilisateur
+      const username = localStorage.getItem('currentUser');
+      if (!username) {
+          console.error('Utilisateur non connecté');
+          return;
+      }
+
+      const userData = JSON.parse(localStorage.getItem(username));
+      if (!userData) {
+          console.error('Données utilisateur non trouvées');
+          return;
+      }
+
+      // Configuration du style
+      doc.setFont("helvetica");
+      doc.setFontSize(20);
+      doc.setTextColor(0, 123, 255);
+      
+      // Titre
+      doc.text("Rapport de Progression", 20, 20);
+      
+      // Le reste de votre code pour générer le PDF...
+
+      // Sauvegarder le PDF
+      doc.save(`rapport_progression_${username}.pdf`);
+  } catch (error) {
+      console.error('Erreur lors de la génération du PDF:', error);
+  }
+}
+
+// Ajouter un écouteur d'événement au chargement de la page
+document.addEventListener('DOMContentLoaded', function() {
+  const downloadButton = document.querySelector('.download');
+  if (downloadButton) {
+      downloadButton.addEventListener('click', downloadPDF);
+      console.log('Écouteur d\'événement ajouté au bouton de téléchargement');
+  } else {
+      console.error('Bouton de téléchargement non trouvé');
+  }
+});
+    
+    // Ajouter l'écouteur d'événement sur le bouton de téléchargement
+    document.addEventListener('DOMContentLoaded', function() {
+        const downloadButton = document.querySelector('.download');
+        if (downloadButton) {
+            downloadButton.addEventListener('click', downloadPDF);
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Vérifier si l'utilisateur est connecté
+      const username = localStorage.getItem('currentUser');
+      if (!username) {
+          window.location.href = 'login.html';
+          return;
+      }
+  
+      // Mettre à jour le tableau avec les données
+      updateTableData();
+  });
+
+  document.getElementById('categoryFilter').addEventListener('change', function() {
+    const selectedCategory = this.value.toLowerCase();
+    const categories = document.querySelectorAll('.grammaire, .vocabulaire, .comprehension');
+    
+    categories.forEach(category => {
+        if (selectedCategory === 'toute') {
+            category.style.display = 'block';
+        } else {
+            category.style.display = category.className === selectedCategory ? 'block' : 'none';
+        }
+    });
+});
