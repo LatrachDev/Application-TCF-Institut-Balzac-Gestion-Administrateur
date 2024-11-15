@@ -10,7 +10,7 @@
 <body>
     <div class="container">
         <h1>Statistiques des Tests de Langue</h1>
-        <input type="text" id="searchId" placeholder="Rechercher par ID" oninput="filterResults()">
+        <!-- <input  type="text" id="searchId" placeholder="Rechercher par nom d'utilisateur" oninput="filterResults()"> -->
         <div class="legend">
             <div class="legend-item">
                 <div class="legend-color" style="background-color: #4CAF50;"></div>
@@ -26,63 +26,63 @@
             <div class="stat-card success-rate">
                 <h2>Taux de Réussite Global</h2>
                 <div class="level-container">
-                    <div class="level-label">
+                    <div class="level-label" data-level="A1">
                         <span>A1</span>
-                        <span>85%</span>
+                        <span>0%</span>
                     </div>
                     <div class="level-bar">
-                        <div class="level-progress" style="width: 85%">
-                            <span class="progress-text">85%</span>
+                        <div class="level-progress" style="width: 0%">
+                            <span class="progress-text">0%</span>
                         </div>
                     </div>
 
-                    <div class="level-label">
+                    <div class="level-label" data-level="A2">
                         <span>A2</span>
-                        <span>78%</span>
+                        <span>0%</span>
                     </div>
                     <div class="level-bar">
-                        <div class="level-progress" style="width: 78%">
-                            <span class="progress-text">78%</span>
+                        <div class="level-progress" style="width: 0%">
+                            <span class="progress-text">0%</span>
                         </div>
                     </div>
 
-                    <div class="level-label">
+                    <div class="level-label" data-level="B1">
                         <span>B1</span>
-                        <span>65%</span>
+                        <span>0%</span>
                     </div>
                     <div class="level-bar">
-                        <div class="level-progress" style="width: 65%">
-                            <span class="progress-text">65%</span>
+                        <div class="level-progress" style="width: 0%">
+                            <span class="progress-text">0%</span>
                         </div>
                     </div>
 
-                    <div class="level-label">
+                    <div class="level-label" data-level="B2">
                         <span>B2</span>
-                        <span>55%</span>
+                        <span>0%</span>
                     </div>
                     <div class="level-bar">
-                        <div class="level-progress" style="width: 55%">
-                            <span class="progress-text">55%</span>
+                        <div class="level-progress" style="width: 0%">
+                            <span class="progress-text">0%</span>
                         </div>
                     </div>
 
-                    <div class="level-label">
+                    <div class="level-label" data-level="C1">
                         <span>C1</span>
-                        <span>42%</span>
+                        <span>0%</span>
                     </div>
                     <div class="level-bar">
-                        <div class="level-progress" style="width: 42%">
-                            <span class="progress-text">42%</span>
+                        <div class="level-progress" style="width: 0%">
+                            <span class="progress-text">0%</span>
                         </div>
                     </div>
 
-                    <div class="level-label">
+                    <div class="level-label" data-level="C2">
                         <span>C2</span>
-                        <span>35%</span>
+                        <span>0%</span>
                     </div>
                     <div class="level-bar">
-                        <div class="level-progress" style="width: 35%">
-                            <span class="progress-text">35%</span>
+                        <div class="level-progress" style="width: 0%">
+                            <span class="progress-text">0%</span>
                         </div>
                     </div>
                 </div>
@@ -91,68 +91,70 @@
             <div class="stat-card attempts">
                 <h2>Tentatives par Niveau</h2>
                 <div class="level-container">
-                    <div class="level-label">
+                    <div class="level-label" data-level="A1">
                         <span>A1</span>
-                        <span>1250</span>
+                        <span>0</span>
                     </div>
                     <div class="level-bar">
-                        <div class="level-progress" style="width: 100%">
-                            <span class="progress-text">1250</span>
+                        <div class="level-progress" style="width: 0%">
+                            <span class="progress-text">0</span>
                         </div>
                     </div>
 
-                    <div class="level-label">
+                    <div class="level-label" data-level="A2">
                         <span>A2</span>
-                        <span>980</span>
+                        <span>0</span>
                     </div>
                     <div class="level-bar">
-                        <div class="level-progress" style="width: 78%">
-                            <span class="progress-text">980</span>
+                        <div class="level-progress" style="width: 0%">
+                            <span class="progress-text">0</span>
                         </div>
                     </div>
 
-                    <div class="level-label">
+                    <div class="level-label" data-level="B1">
                         <span>B1</span>
-                        <span>750</span>
+                        <span>0</span>
                     </div>
                     <div class="level-bar">
-                        <div class="level-progress" style="width: 60%">
-                            <span class="progress-text">750</span>
+                        <div class="level-progress" style="width: 0%">
+                            <span class="progress-text">0</span>
                         </div>
                     </div>
 
-                    <div class="level-label">
+                    <div class="level-label" data-level="B2">
                         <span>B2</span>
-                        <span>520</span>
+                        <span>0</span>
                     </div>
                     <div class="level-bar">
-                        <div class="level-progress" style="width: 42%">
-                            <span class="progress-text">520</span>
+                        <div class="level-progress" style="width: 0%">
+                            <span class="progress-text">0</span>
                         </div>
                     </div>
 
-                    <div class="level-label">
+                    <div class="level-label" data-level="C1">
                         <span>C1</span>
-                        <span>320</span>
+                        <span>0</span>
                     </div>
                     <div class="level-bar">
-                        <div class="level-progress" style="width: 26%">
-                            <span class="progress-text">320</span>
+                        <div class="level-progress" style="width: 0%">
+                            <span class="progress-text">0</span>
                         </div>
                     </div>
 
-                    <div class="level-label">
+                    <div class="level-label" data-level="C2">
                         <span>C2</span>
-                        <span>180</span>
+                        <span>0</span>
                     </div>
                     <div class="level-bar">
-                        <div class="level-progress" style="width: 14%">
-                            <span class="progress-text">180</span>
+                        <div class="level-progress" style="width: 0%">
+                            <span class="progress-text">0</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    
+<script src="js/statistique.js"></script>
 </body>
 </html>

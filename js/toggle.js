@@ -13,3 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
         openSidebarBtn.classList.add('hidden');
     });
 });
+
+
+function logout() {
+    localStorage.removeItem('currentUser');
+    window.location.href = 'login.html';
+}

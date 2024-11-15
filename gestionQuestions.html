@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="Participez au quiz TCF pour tester vos connaissances en français. Découvrez votre niveau de maîtrise, de A1 à C2, et progressez avec l'Institut Balzac.">
-        <meta name="keywords" content="Quiz TCF, test de français, niveau de français, évaluation de langue, Institut Balzac, test TCF, niveau A1 C2, apprendre français">
+        <meta name="description" content="Gestion des questions du quiz TCF - Institut Balzac">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Quiz TCF Français - Testez et Évaluez Votre Niveau de Langue | Institut Balzac</title>
+        <title>Gestion des Questions - Quiz TCF | Institut Balzac</title>
         <script src="/js/tailwind.js"></script>
     </head>
     <body class="bg-gradient-to-b from-blue-600 to-sky-100 flex flex-col items-center p-8">
@@ -22,6 +21,7 @@
             <path fill-rule="evenodd" d="M19.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 1 1-1.06-1.06L17.69 12l-6.97-6.97a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
         </svg>
       </div>
+
       <!-- Sidebar -->
       <aside id="sidebar" class="bg-white w-64 h-full shadow-md p-6 fixed top-0 left-0 transform -translate-x-full transition-transform duration-300">
           <!-- Close Button -->
@@ -29,67 +29,113 @@
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 cursor-pointer hover:text-blue-500 font-semibold">
                 <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
             </svg>
-        </div>
-          <h2 class="text-xl font-bold text-blue-600 mb-8"><a href="adminHome.html">Admin Dashboard</a> </h2>
-          <!-- Navigation Links -->
+          </div>
+          <h2 class="text-xl font-bold text-blue-600 mb-8"><a href="adminHome.html">Admin Dashboard</a></h2>
           <nav class="flex flex-col space-y-4">
-              <a href="gestionQuestions.html" class="text-gray-700 hover:text-blue-500 font-semibold">Gestion des Questions</a>
+              <a href="adminHome.html" class="text-gray-700 hover:text-blue-500 font-semibold">Gestion des Questions</a>
               <a href="#" class="text-gray-700 hover:text-blue-500 font-semibold">Suivi des Résultats</a>
               <a href="#" class="text-gray-700 hover:text-blue-500 font-semibold">Statistiques Générales</a>
-              <a href="login.html" class="text-gray-700 hover:text-blue-500 font-semibold"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                  <path fill-rule="evenodd" d="M16.5 3.75a1.5 1.5 0 0 1 1.5 1.5v13.5a1.5 1.5 0 0 1-1.5 1.5h-6a1.5 1.5 0 0 1-1.5-1.5V15a.75.75 0 0 0-1.5 0v3.75a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V5.25a3 3 0 0 0-3-3h-6a3 3 0 0 0-3 3V9A.75.75 0 1 0 9 9V5.25a1.5 1.5 0 0 1 1.5-1.5h6Zm-5.03 4.72a.75.75 0 0 0 0 1.06l1.72 1.72H2.25a.75.75 0 0 0 0 1.5h10.94l-1.72 1.72a.75.75 0 1 0 1.06 1.06l3-3a.75.75 0 0 0 0-1.06l-3-3a.75.75 0 0 0-1.06 0Z" clip-rule="evenodd" /></svg>
+              <a href="login.html" class="text-gray-700 hover:text-blue-500 font-semibold">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                    <path fill-rule="evenodd" d="M16.5 3.75a1.5 1.5 0 0 1 1.5 1.5v13.5a1.5 1.5 0 0 1-1.5 1.5h-6a1.5 1.5 0 0 1-1.5-1.5V15a.75.75 0 0 0-1.5 0v3.75a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V5.25a3 3 0 0 0-3-3h-6a3 3 0 0 0-3 3V9A.75.75 0 1 0 9 9V5.25a1.5 1.5 0 0 1 1.5-1.5h6Z" clip-rule="evenodd" />
+                </svg>
               </a>
           </nav>
       </aside>
 
-      <h1 class="text-2xl font-bold text-white mt-24 mb-6 text-center">Manage Quiz Questions</h1>
+      <h1 class="text-2xl font-bold text-white mt-24 mb-6 text-center">Gestion des Questions du Quiz</h1>
       
+      <!-- Formulaire d'ajout de question -->
       <form id="questionForm" class="bg-white shadow-md rounded-lg p-6 mb-8 w-full max-w-lg">
-          
-        <div class="mb-4">
-          <label for="questionText" class="block text-gray-700 font-semibold mb-2">Question Text</label>
-          <input type="text" id="questionText" placeholder="Enter question text.." class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" required>
-        </div>
+          <div class="mb-4">
+              <label for="questionText" class="block text-gray-700 font-semibold mb-2">Question</label>
+              <input 
+                  type="text" 
+                  id="questionText" 
+                  name="questionText"
+                  placeholder="Entrez la question..." 
+                  class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" 
+                  required
+              >
+          </div>
 
-        <div class="mb-4">
-          <label for="answerOptions" class="block text-gray-700 font-semibold mb-2">Answer Options (comma-separated)</label>
-          <input type="text" id="answerOptions" placeholder="Option1, Option2, Option3, ..." class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" required>
-        </div>
+          <div class="mb-4">
+              <label for="answerOptions" class="block text-gray-700 font-semibold mb-2">Options de réponse</label>
+              <input 
+                  type="text" 
+                  id="answerOptions" 
+                  name="answerOptions"
+                  placeholder="Option1, Option2, Option3, Option4" 
+                  class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" 
+                  required
+              >
+              <p class="text-sm text-gray-500 mt-1">Séparez les options par des virgules (exactement 4 options)</p>
+          </div>
 
-        <div class="mb-4">
-          <label for="correctAnswer" class="block text-gray-700 font-semibold mb-2">Correct Answer</label>
-          <input type="text" id="correctAnswer" placeholder="Correct Answer" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" required>
-        </div>
+          <div class="mb-4">
+              <label for="correctAnswer" class="block text-gray-700 font-semibold mb-2">Réponse correcte</label>
+              <input 
+                  type="text" 
+                  id="correctAnswer" 
+                  name="correctAnswer"
+                  placeholder="Entrez la réponse correcte" 
+                  class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" 
+                  required
+              >
+              <p class="text-sm text-gray-500 mt-1">Doit correspondre exactement à l'une des options</p>
+          </div>
 
-        <div class="mb-4">
-          <label for="level" class="block text-gray-700 font-semibold mb-2">Level</label>
-          <select id="level" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
-            <option value="A1">A1</option>
-            <option value="A2">A2</option>
-            <option value="B1">B1</option>
-            <option value="B2">B2</option>
-            <option value="C1">C1</option>
-            <option value="C2">C2</option>
-          </select>
-        </div>
+          <div class="mb-4">
+              <label for="level" class="block text-gray-700 font-semibold mb-2">Niveau</label>
+              <select 
+                  id="level" 
+                  name="level"
+                  class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                  required
+              >
+                  <option value="A1">A1</option>
+                  <option value="A2">A2</option>
+                  <option value="B1">B1</option>
+                  <option value="B2">B2</option>
+                  <option value="C1">C1</option>
+                  <option value="C2">C2</option>
+              </select>
+          </div>
 
-        <div class="mb-4">
-          <label for="category" class="block text-gray-700 font-semibold mb-2">Category</label>
-          <select id="category" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
-            <option value="Grammar">Grammar</option>
-            <option value="Vocabulary">Vocabulary</option>
-            <option value="Comprehension">Comprehension</option>
-          </select>
-        </div>
+          <div class="mb-4">
+              <label for="category" class="block text-gray-700 font-semibold mb-2">Catégorie</label>
+              <select 
+                  id="category" 
+                  name="category"
+                  class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                  required
+              >
+                  <option value="grammaire">Grammaire</option>
+                  <option value="vocabulaire">Vocabulaire</option>
+                  <option value="comprehension">Compréhension</option>
+              </select>
+          </div>
 
-        <button type="submit" class="w-full bg-blue-500 text-white font-bold py-2 rounded-lg hover:bg-blue-600">Add/Update Question</button>
+          <button 
+              type="submit" 
+              class="w-full bg-blue-500 text-white font-bold py-2 rounded-lg hover:bg-blue-600 transition-colors"
+          >
+              Ajouter la question
+          </button>
       </form>
       
-      <div class="w-full max-w-lg h-svh overflow-y-scroll p-2">
-        <div id="questionsContainer" class="w-full max-w-lg"></div>
+      <!-- Container pour afficher les questions -->
+      <div class="w-full max-w-lg h-svh overflow-y-auto p-2 bg-gray-50 rounded-lg">
+          <div id="questionsContainer" class="space-y-4"></div>
       </div>
       
+      <!-- Scripts -->
       <script src="js/gestionQuestions.js"></script>
       <script src="js/toggle.js"></script>
+
+      <!-- Message de confirmation -->
+      <div id="confirmationMessage" class="fixed bottom-4 right-4 bg-green-500 text-white p-4 rounded-lg shadow-lg transform translate-y-full opacity-0 transition-all duration-300" style="display: none;">
+          Question ajoutée avec succès !
+      </div>
     </body>
 </html>

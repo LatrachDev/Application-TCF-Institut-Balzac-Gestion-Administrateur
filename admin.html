@@ -33,20 +33,6 @@
             </form>
         </div>
         
-        <script>
-            document.getElementById('adminLoginForm').addEventListener('submit', function(event) {
-                event.preventDefault();
-
-                const username = document.getElementById('username').value;
-                const password = document.getElementById('password').value;
-                const errorMessage = document.getElementById('errorMessage');
-
-                if (username === 'admin' && password === 'admin') {
-                    window.location.href = 'adminHome.html';
-                } else {
-                    errorMessage.classList.remove('hidden');
-                }
-            });
-        </script>
+        <script src="js/admin.js"></script>
     </body>
 </html>

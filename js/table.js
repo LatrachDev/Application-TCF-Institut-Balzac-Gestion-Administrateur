@@ -1,3 +1,26 @@
+// Ajouter au début du fichier
+document.addEventListener('DOMContentLoaded', () => {
+    // Vérifier si l'utilisateur est connecté et est un administrateur
+    const username = localStorage.getItem('currentUser');
+    if (!username) {
+        window.location.href = 'login.html';
+        return;
+    }
+
+    // Vérifier le statut de l'utilisateur
+    const userData = JSON.parse(localStorage.getItem(username));
+    if (!userData || userData.status !== 'admin') {
+        // Rediriger vers la page d'accueil si l'utilisateur n'est pas un administrateur
+        window.location.href = 'index.html';
+        return;
+    }
+
+    // Si l'utilisateur est un administrateur, initialiser la page
+    displayAllUsers();
+    resetScores();
+});
+
+
 // four filtre ****************************************
 document.getElementById('categoryFilter').addEventListener('change', function() {
     const selectedCategory = this.value.toLowerCase();
@@ -80,9 +103,20 @@ function updateScores(userData) {
                 const categoryData = userData.levels[level].categories[category];
                 scoreElement.textContent = `${categoryData.bestScore || 0}/10`;
                 attemptsElement.textContent = categoryData.attempts || 0;
+
+                // Vérifier si l'utilisateur a passé le test
+                if (categoryData.attempts > 0) {
+                    scoreElement.style.color = '#333'; // Couleur normale
+                    attemptsElement.style.color = '#333'; // Couleur normale
+                } else {
+                    scoreElement.style.color = '#999'; // Gris
+                    attemptsElement.style.color = '#999'; // Gris
+                }
             } else {
                 scoreElement.textContent = '-/10';
                 attemptsElement.textContent = '0';
+                scoreElement.style.color = '#999'; // Gris
+                attemptsElement.style.color = '#999'; // Gris
             }
         });
     });
@@ -99,6 +133,8 @@ function resetScores() {
             
             scoreElement.textContent = '-/10';
             attemptsElement.textContent = '0';
+            scoreElement.style.color = '#999'; // Gris
+            attemptsElement.style.color = '#999'; // Gris
         });
     });
 }

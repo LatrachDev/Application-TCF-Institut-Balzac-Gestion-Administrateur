@@ -1353,13 +1353,9 @@ document.addEventListener('DOMContentLoaded', initApp);
 
 
 
-
 //******************************************************************************************************
 //****************************************************************************************************** 
 //****************************************************************************************************** 
-
-
-
 
 function updateTableData() {
   const username = localStorage.getItem('currentUser');
@@ -1394,7 +1390,6 @@ function updateTableData() {
   });
 }
 
-// fonction pour generer le rapport pdf
 function downloadPDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
@@ -1406,7 +1401,7 @@ function downloadPDF() {
   // Configuration du style
   doc.setFont("helvetica");
   doc.setFontSize(20);
-  doc.setTextColor(0, 123, 255); // Couleur bleue pour le titre
+  doc.setTextColor(0, 123, 255);
   
   // Titre
   doc.text("Rapport de Progression", 20, 20);
@@ -1418,39 +1413,63 @@ function downloadPDF() {
   doc.text(`Niveau actuel: ${userData.currentLevel}`, 20, 45);
   
   let yPos = 60;
-    // Parcourir tous les niveaux
-    ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].forEach(level => {
-      if (userData.levels[level]) {
-          doc.setFontSize(16);
-          doc.setTextColor(0, 123, 255);
-          doc.text(`Niveau ${level}`, 20, yPos);
-          yPos += 10;
-          
-          // Parcourir toutes les catégories
-          ['grammaire', 'vocabulaire', 'comprehension'].forEach(category => {
-              const categoryData = userData.levels[level].categories[category];
-              if (categoryData) {
-                  doc.setFontSize(12);
-                  doc.setTextColor(0, 0, 0);
-                  doc.text(`${category.charAt(0).toUpperCase() + category.slice(1)}:`, 30, yPos);
-                  doc.text(`Score: ${categoryData.bestScore}/10`, 100, yPos);
-                  doc.text(`Tentatives: ${categoryData.attempts}`, 150, yPos);
-                  yPos += 8;
-              }
-          });
-          
-          yPos += 10;
-          
-          // Vérifier si on a besoin d'une nouvelle page
-          if (yPos > 270) {
-              doc.addPage();
-              yPos = 20;
+
+  // Parcourir tous les niveaux
+  ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].forEach(level => {
+    if (userData.levels[level]) {
+      doc.setFontSize(16);
+      doc.setTextColor(0, 123, 255);
+      doc.text(`Niveau ${level}`, 20, yPos);
+      yPos += 10;
+      
+      // Parcourir toutes les catégories
+      ['grammaire', 'vocabulaire', 'comprehension'].forEach(category => {
+        const categoryData = userData.levels[level].categories[category];
+        if (categoryData) {
+          doc.setFontSize(12);
+          doc.setTextColor(0, 0, 0);
+          doc.text(`${category.charAt(0).toUpperCase() + category.slice(1)}:`, 30, yPos);
+          doc.text(`Score: ${categoryData.bestScore}/10`, 100, yPos);
+          doc.text(`Tentatives: ${categoryData.attempts}`, 150, yPos);
+          yPos += 15;
+
+          // Ajouter les questions et réponses si des tentatives ont été faites
+          if (categoryData.attempts > 0) {
+            // Récupérer les questions pour ce niveau et cette catégorie
+            const questions = quizQuestions.find(q => q.level === level)?.categories[category];
+            
+            if (questions) {
+              doc.setFontSize(10);
+              questions.forEach((q, index) => {
+                // Vérifier si on a besoin d'une nouvelle page
+                if (yPos > 270) {
+                  doc.addPage();
+                  yPos = 20;
+                }
+
+                doc.text(`Q${index + 1}: ${q.question}`, 40, yPos);
+                yPos += 8;
+                doc.text(`Réponse correcte: ${q.options[q.answer]}`, 45, yPos);
+                yPos += 12;
+              });
+            }
           }
+          
+          yPos += 10;
+        }
+      });
+      
+      // Vérifier si on a besoin d'une nouvelle page
+      if (yPos > 270) {
+        doc.addPage();
+        yPos = 20;
       }
-  });
-      // Sauvegarder le PDF
-      doc.save(`rapport_progression_${username}.pdf`);
     }
+  });
+
+  // Sauvegarder le PDF
+  doc.save(`rapport_progression_${username}.pdf`);
+}
     
     // Ajouter l'écouteur d'événement sur le bouton de téléchargement
     document.addEventListener('DOMContentLoaded', function() {
