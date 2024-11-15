@@ -47,6 +47,7 @@
     background-color: white;
     padding: 10px 20px;
     border-radius: 10px;
+    /* cursor: cell; */
     
   }
   
@@ -123,6 +124,7 @@
   .search{
     border-radius: 10px ;
     outline: none;
+    /* cursor: grabbing; */
     
   }
 

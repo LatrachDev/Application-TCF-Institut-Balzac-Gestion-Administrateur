@@ -1328,7 +1328,7 @@ function logout() {
 document.addEventListener('DOMContentLoaded', initApp);
 
 
-//*************************************** ajoutet fonction dyal updatetableData + modifiet function dyal endquiz
+//*************************************** ajoutet fonction dyal updatetableData + modifiet function dyal endquiz + ajoutet fonction dyal pdf
 function updateTableData() {
   const username = localStorage.getItem('currentUser');
   if (!username) return;
@@ -1422,4 +1422,5 @@ function downloadPDF() {
             downloadButton.addEventListener('click', downloadPDF);
         }
     });
+
 
