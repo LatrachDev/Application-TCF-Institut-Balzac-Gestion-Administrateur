@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Vérification de l'authentification admin
+
   function checkAdminAuth() {
       const currentUser = localStorage.getItem('currentUser');
       const adminData = localStorage.getItem('admin');
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (!checkAdminAuth()) return;
 
-  // Initialisation des questions
+
   function initializeQuestions() {
       const existingQuestions = localStorage.getItem('quizQuestions');
       if (!existingQuestions) {
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const questionForm = document.getElementById('questionForm');
   const questionsContainer = document.getElementById('questionsContainer');
 
-  // Fonction pour afficher les messages
+
   function showConfirmationMessage(message, isError = false) {
       const messageElement = document.getElementById('confirmationMessage');
       if (!messageElement) return;
@@ -109,7 +109,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 3000);
   }
 
-  // Fonction pour afficher les questions
   function displayQuestions() {
       const questions = JSON.parse(localStorage.getItem('quizQuestions'));
       let html = '';
@@ -156,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
       questionsContainer.innerHTML = html || '<p class="text-center text-gray-500 p-4">Aucune question disponible</p>';
   }
 
-  // Fonction pour éditer une question
+
   window.editQuestion = function(level, category, index) {
       const questions = JSON.parse(localStorage.getItem('quizQuestions'));
       const levelData = questions.find(q => q.level === level);
@@ -176,7 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
       questionForm.dataset.editCategory = category;
   };
 
-  // Fonction pour supprimer une question
   window.deleteQuestion = function(level, category, index) {
       if (confirm('Êtes-vous sûr de vouloir supprimer cette question ?')) {
           const questions = JSON.parse(localStorage.getItem('quizQuestions'));
@@ -191,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
   };
 
-  // Gestion du formulaire
+ 
   questionForm.addEventListener('submit', (e) => {
       e.preventDefault();
       
@@ -220,13 +218,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const questions = JSON.parse(localStorage.getItem('quizQuestions'));
       const levelData = questions.find(q => q.level === level);
 
-      // Vérifier si nous sommes en mode édition
+    
       const editIndex = questionForm.dataset.editIndex;
       const editLevel = questionForm.dataset.editLevel;
       const editCategory = questionForm.dataset.editCategory;
 
       if (editIndex !== undefined) {
-          // Mode mise à jour
+
           const oldLevelData = questions.find(q => q.level === editLevel);
           oldLevelData.categories[editCategory].splice(editIndex, 1);
 
@@ -235,7 +233,6 @@ document.addEventListener('DOMContentLoaded', () => {
           }
           levelData.categories[category].push(newQuestion);
 
-          // Réinitialiser le formulaire et le mode édition
           delete questionForm.dataset.editIndex;
           delete questionForm.dataset.editLevel;
           delete questionForm.dataset.editCategory;
@@ -243,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
           
           showConfirmationMessage("Question mise à jour avec succès!");
       } else {
-          // Mode ajout
+
           if (!levelData.categories[category]) {
               levelData.categories[category] = [];
           }
@@ -256,13 +253,13 @@ document.addEventListener('DOMContentLoaded', () => {
       displayQuestions();
   });
 
-  // Fonction de déconnexion
+
   window.logout = function() {
       localStorage.removeItem('admin');
       localStorage.removeItem('currentUser');
       window.location.href = 'admin.html';
   };
 
-  // Afficher les questions au chargement initial
+
   displayQuestions();
 });
