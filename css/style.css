@@ -121,9 +121,6 @@ body {
 
 .niveau-progress {
     margin-top: 10px;
-    height: 5px;
-    background-color: #eee;
-    border-radius: 3px;
 }
 
 .niveau-progress-fill {
