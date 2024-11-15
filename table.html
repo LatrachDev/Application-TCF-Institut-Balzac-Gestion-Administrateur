@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tableau de Progression</title>
+  <link rel="stylesheet" href="css/table.css">
+</head>
+<body>
+  <div class="container">
+    <div class="users-list">
+      <h2>Liste des Utilisateurs</h2>
+      <div class="users-table">
+          <table>
+              <thead>
+                  <tr class="innf">
+                      <th>ID</th>
+                      <th>Nom d'utilisateur</th>
+                      <th>Niveau actuel</th>
+                  </tr>
+              </thead>
+              <tbody id="users-list-body">
+                  <!-- Les utilisateurs seront ajoutés ici dynamiquement -->
+              </tbody>
+          </table>
+      </div>
+  </div>
+  
+    <header>
+      <input class="search" type="search" placeholder=" Rechercher par nom d'utilisateur">
+       <select class="filter" id="categoryFilter">
+        <option value="Toute">Toute</option>
+        <option value="Grammaire">Grammaire</option>
+        <option value="Vocabulaire">Vocabulaire</option>
+        <option value="comprehension">Compréhension</option>
+       </select>
+       
+    </header>
+    <div class="categories">
+      <!-- Grammaire -->
+      <div class="grammaire" style="display: block;">
+        <h2>Grammaire</h2>
+        <table>
+          <tr>
+            <th>Niveau</th>
+            <th>Total</th>
+            <th>Répétition</th>
+          </tr>
+          <div class="table_level">
+            <tr data-level="A1" data-category="grammaire">
+              <td>A1</td>
+              <td id="score-grammaire-A1">-/10</td>
+              <td id="attempts-grammaire-A1">0</td>
+            </tr>
+            <tr data-level="A2" data-category="grammaire">
+              <td>A2</td>
+              <td id="score-grammaire-A2">-/10</td>
+              <td id="attempts-grammaire-A2">0</td>
+            </tr>
+            <tr data-level="B1" data-category="grammaire">
+              <td>B1</td>
+              <td id="score-grammaire-B1">-/10</td>
+              <td id="attempts-grammaire-B1">0</td>
+            </tr>
+            <tr data-level="B2" data-category="grammaire">
+              <td>B2</td>
+              <td id="score-grammaire-B2">-/10</td>
+              <td id="attempts-grammaire-B2">0</td>
+            </tr>
+            <tr data-level="C1" data-category="grammaire">
+              <td>C1</td>
+              <td id="score-grammaire-C1">-/10</td>
+              <td id="attempts-grammaire-C1">0</td>
+            </tr>
+            <tr data-level="C2" data-category="grammaire">
+              <td>C2</td>
+              <td id="score-grammaire-C2">-/10</td>
+              <td id="attempts-grammaire-C2">0</td>
+            </tr>
+          </div>
+        </table>
+      </div>
+    
+      <!-- Vocabulaire -->
+      <div class="vocabulaire" style="display: block;">
+        <h2>Vocabulaire</h2>
+        <table>
+          <tr>
+            <th>Niveau</th>
+            <th>Total</th>
+            <th>Répétition</th>
+          </tr>
+          <div class="table_level">
+            <tr data-level="A1" data-category="vocabulaire">
+              <td>A1</td>
+              <td id="score-vocabulaire-A1">-/10</td>
+              <td id="attempts-vocabulaire-A1">0</td>
+            </tr>
+            <tr data-level="A2" data-category="vocabulaire">
+              <td>A2</td>
+              <td id="score-vocabulaire-A2">-/10</td>
+              <td id="attempts-vocabulaire-A2">0</td>
+            </tr>
+            <tr data-level="B1" data-category="vocabulaire">
+              <td>B1</td>
+              <td id="score-vocabulaire-B1">-/10</td>
+              <td id="attempts-vocabulaire-B1">0</td>
+            </tr>
+            <tr data-level="B2" data-category="vocabulaire">
+              <td>B2</td>
+              <td id="score-vocabulaire-B2">-/10</td>
+              <td id="attempts-vocabulaire-B2">0</td>
+            </tr>
+            <tr data-level="C1" data-category="vocabulaire">
+              <td>C1</td>
+              <td id="score-vocabulaire-C1">-/10</td>
+              <td id="attempts-vocabulaire-C1">0</td>
+            </tr>
+            <tr data-level="C2" data-category="vocabulaire">
+              <td>C2</td>
+              <td id="score-vocabulaire-C2">-/10</td>
+              <td id="attempts-vocabulaire-C2">0</td>
+            </tr>
+          </div>
+        </table>
+      </div>
+    
+      <!-- Compréhension -->
+      <div class="comprehension" style="display: block;">
+        <h2>Compréhension</h2>
+        <table>
+          <tr>
+            <th>Niveau</th>
+            <th>Total</th>
+            <th>Répétition</th>
+          </tr>
+          <div class="table_level">
+            <tr data-level="A1" data-category="comprehension">
+              <td>A1</td>
+              <td id="score-comprehension-A1">-/10</td>
+              <td id="attempts-comprehension-A1">0</td>
+            </tr>
+            <tr data-level="A2" data-category="comprehension">
+              <td>A2</td>
+              <td id="score-comprehension-A2">-/10</td>
+              <td id="attempts-comprehension-A2">0</td>
+            </tr>
+            <tr data-level="B1" data-category="comprehension">
+              <td>B1</td>
+              <td id="score-comprehension-B1">-/10</td>
+              <td id="attempts-comprehension-B1">0</td>
+            </tr>
+            <tr data-level="B2" data-category="comprehension">
+              <td>B2</td>
+              <td id="score-comprehension-B2">-/10</td>
+              <td id="attempts-comprehension-B2">0</td>
+            </tr>
+            <tr data-level="C1" data-category="comprehension">
+              <td>C1</td>
+              <td id="score-comprehension-C1">-/10</td>
+              <td id="attempts-comprehension-C1">0</td>
+            </tr>
+            <tr data-level="C2" data-category="comprehension">
+              <td>C2</td>
+              <td id="score-comprehension-C2">-/10</td>
+              <td id="attempts-comprehension-C2">0</td>
+            </tr>
+          </div>
+        </table>
+      </div>
+    </div>
+   
+    <footer>
+      <button class="download">Télécharger le rapport PDF</button>
+    </footer>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/table.js"></script>
+</body>
+</html>

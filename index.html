@@ -1,21 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Quiz de français - Testez votre niveau de A1 à C2">
     <link rel="stylesheet" href="css/style.css">
-    <title>Document</title>
+    <title>Quiz de Français</title>
 </head>
 <body>
     <header class="header">
         <div class="logo">
-            <img src="images/Sans_titre-removebg-preview.png" style="height: 50px;" alt="">
-        </div>  
+            <img src="images/Sans_titre-removebg-preview.png" style="height: 50px;" alt="Logo">
+        </div>
+        <div class="user-controls">
+            <div class="user-info">
+                <span id="username-display"></span>
+                <span id="current-level"></span>
+            </div>
+            <button onclick="logout()" class="logout-btn">Déconnexion</button>
+        </div>
     </header>
     
     <section class="section1">
         <div class="information">
-            <div class="information2">
                 <div class="info">
                     <h2>Notre Mission</h2>
                     <p>Promouvoir l'excellence dans l'enseignement du français et faciliter son apprentissage à travers des outils pédagogiques innovants et des méthodes d'évaluation rigoureuses.</p>
@@ -24,69 +31,106 @@
                     <h2>Notre Expertise</h2>
                     <p>Une équipe de professionnels qualifiés et passionnés, des méthodes pédagogiques modernes et une expérience reconnue dans la certification linguistique.</p>
                 </div>
-            </div>
         </div>
+      
     </section>
 
-    <!-- Section des niveaux affichée par défaut -->
-    <section class="niveaux-section" style="display: block;"> 
+
+    <section class="niveaux-section">
         <h2>Choisissez un niveau</h2>
         <div class="niveaux-container">
-            <!-- Création manuelle des niveaux -->
             <div class="niveau">
                 <button class="niveau-button" data-level="A1">Niveau A1</button>
+                <div class="niveau-progress" id="progress-A1"></div>
             </div>
             <div class="niveau">
                 <button class="niveau-button" data-level="A2">Niveau A2</button>
+                <div class="niveau-progress" id="progress-A2"></div>
             </div>
             <div class="niveau">
                 <button class="niveau-button" data-level="B1">Niveau B1</button>
+                <div class="niveau-progress" id="progress-B1"></div>
             </div>
             <div class="niveau">
                 <button class="niveau-button" data-level="B2">Niveau B2</button>
+                <div class="niveau-progress" id="progress-B2"></div>
             </div>
             <div class="niveau">
-                <button class="niveau-button" data-level="C1" >Niveau C1</button>
+                <button class="niveau-button" data-level="C1">Niveau C1</button>
+                <div class="niveau-progress" id="progress-C1"></div>
             </div>
             <div class="niveau">
                 <button class="niveau-button" data-level="C2">Niveau C2</button>
+                <div class="niveau-progress" id="progress-C2"></div>
             </div>
         </div>
     </section>
+
+
     <section class="categories-section" style="display: none;">
         <h2>Choisissez une catégorie</h2>
         <div class="categories-container">
-            <!-- Les catégories seront ajoutées ici dynamiquement -->
+            <div class="category">
+                <button class="category-button" data-category="grammaire">
+                    <span class="category-icon">📘</span>
+                    Grammaire
+                    
+                </button>
+            </div>
+            <div class="category">
+                <button class="category-button" data-category="vocabulaire">
+                    <span class="category-icon">📚</span>
+                    Vocabulaire
+                    
+                </button>
+            </div>
+            <div class="category">
+                <button class="category-button" data-category="comprehension">
+                    <span class="category-icon">🔍</span>
+                    Compréhension
+                    
+                </button>
+            </div>
         </div>
+        <button onclick="retourNiveaux()" class="btn-retour">Retour aux niveaux</button>
     </section>
 
-    <div class="hidden" style="display: none;">
-        <div class="timer-container">
-            <div class="timer-display"></div>
+
+    <div class="quiz-section" style="display: none;">
+        <div class="quiz-header">
+            <div class="quiz-info">
+                <span class="current-level-display"></span>
+                <span class="current-category-display"></span>
+            </div>
+            <div class="timer-container">
+                <div class="timer-display">5:00</div>
+            </div>
         </div>
         <div class="listquiz">
             <div class="qst">
                 <p></p>
             </div>
             <div class="reponses">
-                <button class="rep">
-                    <p></p>
-                </button>
-                <button class="rep">
-                    <p></p>
-                </button>
-                <button class="rep">
-                    <p></p>
-                </button>
-                <button class="rep">
-                    <p></p>
-                </button>
+                <button class="rep"><p></p></button>
+                <button class="rep"><p></p></button>
+                <button class="rep"><p></p></button>
+                <button class="rep"><p></p></button>
             </div>
-          
+            <div class="quiz-progress">
+                <span class="question-counter">Question 1/10</span>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="resultat-container" style="display: none;"></div>
+
+    <div class="resultat-container" style="display: none;">
+>
+    </div>
+
+
     <script src="js/script.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>

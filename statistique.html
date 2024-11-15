@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistiques des Tests de Langue</title>
+    <link rel="stylesheet" href="css/statistique.css">
+    
+</head>
+<body>
+    <div class="container">
+        <h1>Statistiques des Tests de Langue</h1>
+        <input type="text" id="searchId" placeholder="Rechercher par ID" oninput="filterResults()">
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #4CAF50;"></div>
+                <span>Taux de Réussite</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #2196F3;"></div>
+                <span>Nombre de Tentatives</span>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card success-rate">
+                <h2>Taux de Réussite Global</h2>
+                <div class="level-container">
+                    <div class="level-label">
+                        <span>A1</span>
+                        <span>85%</span>
+                    </div>
+                    <div class="level-bar">
+                        <div class="level-progress" style="width: 85%">
+                            <span class="progress-text">85%</span>
+                        </div>
+                    </div>
+
+                    <div class="level-label">
+                        <span>A2</span>
+                        <span>78%</span>
+                    </div>
+                    <div class="level-bar">
+                        <div class="level-progress" style="width: 78%">
+                            <span class="progress-text">78%</span>
+                        </div>
+                    </div>
+
+                    <div class="level-label">
+                        <span>B1</span>
+                        <span>65%</span>
+                    </div>
+                    <div class="level-bar">
+                        <div class="level-progress" style="width: 65%">
+                            <span class="progress-text">65%</span>
+                        </div>
+                    </div>
+
+                    <div class="level-label">
+                        <span>B2</span>
+                        <span>55%</span>
+                    </div>
+                    <div class="level-bar">
+                        <div class="level-progress" style="width: 55%">
+                            <span class="progress-text">55%</span>
+                        </div>
+                    </div>
+
+                    <div class="level-label">
+                        <span>C1</span>
+                        <span>42%</span>
+                    </div>
+                    <div class="level-bar">
+                        <div class="level-progress" style="width: 42%">
+                            <span class="progress-text">42%</span>
+                        </div>
+                    </div>
+
+                    <div class="level-label">
+                        <span>C2</span>
+                        <span>35%</span>
+                    </div>
+                    <div class="level-bar">
+                        <div class="level-progress" style="width: 35%">
+                            <span class="progress-text">35%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card attempts">
+                <h2>Tentatives par Niveau</h2>
+                <div class="level-container">
+                    <div class="level-label">
+                        <span>A1</span>
+                        <span>1250</span>
+                    </div>
+                    <div class="level-bar">
+                        <div class="level-progress" style="width: 100%">
+                            <span class="progress-text">1250</span>
+                        </div>
+                    </div>
+
+                    <div class="level-label">
+                        <span>A2</span>
+                        <span>980</span>
+                    </div>
+                    <div class="level-bar">
+                        <div class="level-progress" style="width: 78%">
+                            <span class="progress-text">980</span>
+                        </div>
+                    </div>
+
+                    <div class="level-label">
+                        <span>B1</span>
+                        <span>750</span>
+                    </div>
+                    <div class="level-bar">
+                        <div class="level-progress" style="width: 60%">
+                            <span class="progress-text">750</span>
+                        </div>
+                    </div>
+
+                    <div class="level-label">
+                        <span>B2</span>
+                        <span>520</span>
+                    </div>
+                    <div class="level-bar">
+                        <div class="level-progress" style="width: 42%">
+                            <span class="progress-text">520</span>
+                        </div>
+                    </div>
+
+                    <div class="level-label">
+                        <span>C1</span>
+                        <span>320</span>
+                    </div>
+                    <div class="level-bar">
+                        <div class="level-progress" style="width: 26%">
+                            <span class="progress-text">320</span>
+                        </div>
+                    </div>
+
+                    <div class="level-label">
+                        <span>C2</span>
+                        <span>180</span>
+                    </div>
+                    <div class="level-bar">
+                        <div class="level-progress" style="width: 14%">
+                            <span class="progress-text">180</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
