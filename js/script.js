@@ -1190,33 +1190,83 @@ let timeUsed = 0;
     }
 
 
-    function endQuiz() {
-      clearInterval(timer);
+  //   function endQuiz() {
+  //     clearInterval(timer);
       
-      const username = localStorage.getItem('currentUser');
-      const userData = JSON.parse(localStorage.getItem(username));
+  //     const username = localStorage.getItem('currentUser');
+  //     const userData = JSON.parse(localStorage.getItem(username));
       
-      const categoryData = userData.levels[currentLevel].categories[currentCategory];
+  //     const categoryData = userData.levels[currentLevel].categories[currentCategory];
 
-      if (!categoryData.validation) {
-          categoryData.attempts = (categoryData.attempts || 0) + 1;
-          categoryData.time = timeUsed;
-          categoryData.score = score;
-          categoryData.bestScore = Math.max(categoryData.bestScore || 0, score);
+  //     if (!categoryData.validation) {
+  //         categoryData.attempts = (categoryData.attempts || 0) + 1;
+  //         categoryData.time = timeUsed;
+  //         categoryData.score = score;
+  //         categoryData.bestScore = Math.max(categoryData.bestScore || 0, score);
           
 
-          if (score === 10) {
-              categoryData.validation = true;
-          }
-      }
+  //         if (score === 10) {
+  //             categoryData.validation = true;
+  //         }
+  //     }
       
-      if (checkLevelCompletion(userData, currentLevel)) {
-          showLevelCompletionMessage();
-      }
+  //     if (checkLevelCompletion(userData, currentLevel)) {
+  //         showLevelCompletionMessage();
+  //     }
       
-      localStorage.setItem(username, JSON.stringify(userData));
-      displayResults(score, timeUsed, categoryData);
+  //     localStorage.setItem(username, JSON.stringify(userData));
+  //     displayResults(score, timeUsed, categoryData);
+  // }
+
+  // ... existing code ...
+
+function endQuiz() {
+  clearInterval(timer);
+  
+  const username = localStorage.getItem('currentUser');
+  const userData = JSON.parse(localStorage.getItem(username));
+  const timeUsed = 60 - timeLeft; // Utilise le temps restant pour calculer le temps utilisé
+  
+  // Vérifier et initialiser la structure des données si nécessaire
+  if (!userData.levels[currentLevel]) {
+      userData.levels[currentLevel] = {
+          categories: {},
+          completed: false
+      };
   }
+  if (!userData.levels[currentLevel].categories[currentCategory]) {
+      userData.levels[currentLevel].categories[currentCategory] = {
+          bestScore: 0,
+          attempts: 0,
+          validation: false,
+          time: Infinity
+      };
+  }
+  
+  const categoryData = userData.levels[currentLevel].categories[currentCategory];
+  categoryData.attempts = (categoryData.attempts || 0) + 1;
+  categoryData.time = Math.min(categoryData.time || Infinity, timeUsed);
+  categoryData.score = score;
+  categoryData.bestScore = Math.max(categoryData.bestScore || 0, score);
+  categoryData.validation = score === 10;
+  
+  // Vérifier si le niveau est complété
+  if (checkLevelCompletion(userData, currentLevel)) {
+      showLevelCompletionMessage();
+      // Mettre à jour le niveau actuel de l'utilisateur
+      userData.currentLevel = getNextLevel(currentLevel);
+  }
+  
+  localStorage.setItem(username, JSON.stringify(userData));
+  displayResults(score, timeUsed, categoryData);
+  
+  // Si vous avez une fonction pour mettre à jour un tableau de données
+  if (typeof updateTableData === 'function') {
+      updateTableData();
+  }
+}
+
+// ... existing code ...
     
     function checkLevelCompletion(userData, level) {
         const categories = userData.levels[level].categories;
