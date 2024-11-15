@@ -11,7 +11,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: auto;
     background: linear-gradient(to bottom, #57b9ff, #a5d9ff);
   }
   
@@ -120,6 +120,7 @@
     border-radius: 20px;
     cursor: pointer;
     margin-top: 50px;
+    margin-bottom: 50px;
   }
   .search{
     border-radius: 10px ;
@@ -132,6 +133,98 @@
     font-size: medium;
     font-weight: 600;
   }
+
+  .search {
+    padding: 8px 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    margin-right: 16px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.search:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.user-info-display {
+    max-width: 600px;
+    margin: 20px auto;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.users-list {
+  background: rgba(255, 255, 255, 0.5);
+  padding: 20px;
+  border-radius: 10px;
+  margin: 20px 0;
+  width: 100%;
+  margin-top: 80px;
+}
+
+.users-list h2 {
+  color: #0062ff;
+  margin-bottom: 15px;
+  text-align: center;
+
+}
+
+
+.users-table {
+  overflow-x: auto;
+}
+
+.users-table table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 8px;
+  margin-bottom: 15px;
+}
+
+.users-table th,
+.users-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid rgba(0, 98, 255, 0.2);
+}
+
+.users-table th {
+  background-color: #0062ff;
+  color: white;
+  font-weight: 600;
+}
+
+.users-table tr:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Animation pour les nouvelles entrées */
+.users-table tr {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+      transform: translateY(-10px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
 
 
   
