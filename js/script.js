@@ -1394,63 +1394,6 @@ function updateTableData() {
   });
 }
 
-// fonction pour generer le rapport pdf
-// function downloadPDF() {
-//   const { jsPDF } = window.jspdf;
-//   const doc = new jsPDF();
-  
-//   // Récupérer les données de l'utilisateur
-//   const username = localStorage.getItem('currentUser');
-//   const userData = JSON.parse(localStorage.getItem(username));
-  
-//   // Configuration du style
-//   doc.setFont("helvetica");
-//   doc.setFontSize(20);
-//   doc.setTextColor(0, 123, 255); // Couleur bleue pour le titre
-  
-//   // Titre
-//   doc.text("Rapport de Progression", 20, 20);
-  
-//   // Informations de l'utilisateur
-//   doc.setFontSize(14);
-//   doc.setTextColor(0, 0, 0);
-//   doc.text(`Utilisateur: ${username}`, 20, 35);
-//   doc.text(`Niveau actuel: ${userData.currentLevel}`, 20, 45);
-  
-//   let yPos = 60;
-//     // Parcourir tous les niveaux
-//     ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].forEach(level => {
-//       if (userData.levels[level]) {
-//           doc.setFontSize(16);
-//           doc.setTextColor(0, 123, 255);
-//           doc.text(`Niveau ${level}`, 20, yPos);
-//           yPos += 10;
-          
-//           // Parcourir toutes les catégories
-//           ['grammaire', 'vocabulaire', 'comprehension'].forEach(category => {
-//               const categoryData = userData.levels[level].categories[category];
-//               if (categoryData) {
-//                   doc.setFontSize(12);
-//                   doc.setTextColor(0, 0, 0);
-//                   doc.text(`${category.charAt(0).toUpperCase() + category.slice(1)}:`, 30, yPos);
-//                   doc.text(`Score: ${categoryData.bestScore}/10`, 100, yPos);
-//                   doc.text(`Tentatives: ${categoryData.attempts}`, 150, yPos);
-//                   yPos += 8;
-//               }
-//           });
-          
-//           yPos += 10;
-          
-//           // Vérifier si on a besoin d'une nouvelle page
-//           if (yPos > 270) {
-//               doc.addPage();
-//               yPos = 20;
-//           }
-//       }
-//   });
-//       // Sauvegarder le PDF
-//       doc.save(`rapport_progression_${username}.pdf`);
-//     }
 function downloadPDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
