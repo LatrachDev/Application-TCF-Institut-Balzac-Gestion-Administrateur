@@ -135,4 +135,55 @@
 
 
   
-  
+  /* Ajouter à votre fichier CSS existant */
+
+.validated {
+  background-color: #d4edda;
+  transition: background-color 0.3s ease;
+}
+
+tr[data-level] {
+  transition: all 0.3s ease;
+}
+
+tr[data-level]:hover {
+  background-color: #f8f9fa;
+  transform: scale(1.02);
+}
+
+.search {
+  padding: 8px 15px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  margin-right: 10px;
+  transition: all 0.3s ease;
+}
+
+.search:focus {
+  outline: none;
+  border-color: #0062ff;
+  box-shadow: 0 0 5px rgba(0,98,255,0.3);
+}
+
+.filter {
+  padding: 8px 15px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter:focus {
+  outline: none;
+  border-color: #0062ff;
+}
+
+.download {
+  transition: all 0.3s ease;
+}
+
+.download:hover {
+  background-color: #0056e0;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}

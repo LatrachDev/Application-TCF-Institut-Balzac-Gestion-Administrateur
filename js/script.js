@@ -991,6 +991,16 @@ let timer;
 let timeLeft = 60; 
 let timeUsed = 0;
 
+function initializeQuestions() {
+
+  if (!localStorage.getItem('quizQuestions')) {
+
+      localStorage.setItem('quizQuestions', JSON.stringify(quizQuestions));
+  }
+}
+
+
+
     function checkUserAuth() {
         const username = localStorage.getItem('currentUser');
         if (!username) {
@@ -1001,21 +1011,37 @@ let timeUsed = 0;
     }
 
     function initApp() {
-        const username = checkUserAuth();
-        if (!username) return;
-    
-        displayUsername();
-        updateLevelButtons();
-    
-        document.querySelectorAll('.niveau-button').forEach(button => {
-            button.addEventListener('click', () => handleLevelSelection(button.dataset.level));
-        });
-    
-        document.querySelectorAll('.category-button').forEach(button => {
-            button.addEventListener('click', () => startQuiz(button.dataset.category));
-        });
-    }
+      const username = checkUserAuth();
+      if (!username) return;
 
+      initializeQuestions();
+      
+      displayUsername();
+      updateLevelButtons();
+  
+      document.querySelectorAll('.niveau-button').forEach(button => {
+          button.addEventListener('click', () => handleLevelSelection(button.dataset.level));
+      });
+  
+      document.querySelectorAll('.category-button').forEach(button => {
+          button.addEventListener('click', () => startQuiz(button.dataset.category));
+      });
+  }
+
+  function updateQuestions(newQuestions) {
+    localStorage.setItem('quizQuestions', JSON.stringify(newQuestions));
+}
+
+
+function addQuestion(level, category, newQuestion) {
+    const questions = JSON.parse(localStorage.getItem('quizQuestions'));
+    const levelData = questions.find(q => q.level === level);
+    
+    if (levelData && levelData.categories[category]) {
+        levelData.categories[category].push(newQuestion);
+        localStorage.setItem('quizQuestions', JSON.stringify(questions));
+    }
+}
 
     function displayUsername() {
         const username = localStorage.getItem('currentUser');
@@ -1081,15 +1107,18 @@ let timeUsed = 0;
       });
   }
     
-    function getQuestions(level, category) {
-        const levelData = quizQuestions.find(q => q.level === level);
-        if (!levelData) return [];
+  function getQuestions(level, category) {
+
+    const allQuestions = JSON.parse(localStorage.getItem('quizQuestions'));
+    const levelData = allQuestions.find(q => q.level === level);
     
-        const categoryQuestions = levelData.categories[category];
-        if (!categoryQuestions) return [];
-    
-        return [...categoryQuestions].sort(() => Math.random() - 0.5).slice(0, 10);
-    }
+    if (!levelData) return [];
+
+    const categoryQuestions = levelData.categories[category];
+    if (!categoryQuestions) return [];
+
+    return [...categoryQuestions].sort(() => Math.random() - 0.5).slice(0, 10);
+}
     
 
 
@@ -1118,29 +1147,30 @@ let timeUsed = 0;
     }
     
     function startTimer() {
-        const timerDisplay = document.querySelector('.timer-display');
-        
-        clearInterval(timer);
-        timeLeft = 60; 
-        
-        timer = setInterval(() => {
-            timerDisplay.textContent = `${timeLeft}s`;
-            
-            if (timeLeft === 0) {
-                clearInterval(timer);
-                currentQuestionIndex++;
-                if (currentQuestionIndex < currentQuestions.length) {
-                    displayQuestion();
-                    startTimer();
-                } else {
-                    endQuiz();
-                }
-            }
-            
-            timeLeft--;
-            timeUsed++; 
-        }, 1000);
-    }
+      const timerDisplay = document.querySelector('.timer-display');
+      
+      clearInterval(timer);
+      timeLeft = 60; // Réinitialisation à 60 secondes
+      
+      timer = setInterval(() => {
+          timerDisplay.textContent = `${timeLeft}s`;
+          
+          if (timeLeft === 0) {
+              clearInterval(timer);
+              currentQuestionIndex++;
+              if (currentQuestionIndex < currentQuestions.length) {
+                  displayQuestion();
+                  startTimer();
+              } else {
+                  endQuiz();
+              }
+          }
+          
+          timeLeft--;
+          timeUsed++; 
+      }, 1000);
+  }
+  
 
     function displayQuestion() {
         if (!currentQuestions || currentQuestionIndex >= currentQuestions.length) {
@@ -1191,47 +1221,44 @@ let timeUsed = 0;
 
 
 
-    
-  function endQuiz() {
-    clearInterval(timer);
 
-    const username = localStorage.getItem('currentUser');
-    const userData = JSON.parse(localStorage.getItem(username));
-    const timeUsed = 300 - timeLeft;
+function endQuiz() {
+  clearInterval(timer);
 
-    if (!userData.levels[currentLevel].categories[currentCategory]) {
-        userData.levels[currentLevel].categories[currentCategory] = {
-            bestScore: 0,
-            attempts: 0,
-            validation: false,
-            time: Infinity
-        };
-    }
-
-    const categoryData = userData.levels[currentLevel].categories[currentCategory];
-    
-    categoryData.attempts = (categoryData.attempts || 0) + 1;
-    categoryData.time = Math.min(categoryData.time || Infinity, timeUsed);
-    categoryData.score = score;
-    categoryData.bestScore = Math.max(categoryData.bestScore || 0, score);
-
-    if (score === 10) {
-        categoryData.validation = true;
-    }
+  const username = localStorage.getItem('currentUser');
+  const userData = JSON.parse(localStorage.getItem(username));
 
 
-    if (checkLevelCompletion(userData, currentLevel)) {
-        showLevelCompletionMessage();
-    }
+  if (!userData.levels[currentLevel].categories[currentCategory]) {
+      userData.levels[currentLevel].categories[currentCategory] = {
+          bestScore: 0,
+          attempts: 0,
+          validation: false,
+          time: Infinity
+      };
+  }
 
+  const categoryData = userData.levels[currentLevel].categories[currentCategory];
+  
 
-    localStorage.setItem(username, JSON.stringify(userData));
+  if (!categoryData.validation) {
+      categoryData.attempts = (categoryData.attempts || 0) + 1;
+      categoryData.time = Math.min(categoryData.time || Infinity, timeUsed);
+      categoryData.score = score;
+      categoryData.bestScore = Math.max(categoryData.bestScore || 0, score);
 
+      if (score === 10) {
+          categoryData.validation = true;
+      }
+  }
 
-    displayResults(score, timeUsed, categoryData);
+  if (checkLevelCompletion(userData, currentLevel)) {
+      showLevelCompletionMessage();
+  }
 
-
-    updateTableData();
+  localStorage.setItem(username, JSON.stringify(userData));
+  displayResults(score, timeUsed, categoryData);
+  updateTableData();
 }
 
     function checkLevelCompletion(userData, level) {
@@ -1260,7 +1287,7 @@ let timeUsed = 0;
         
         const bestScoreMessage = categoryData.bestScore < score 
             ? '<p class="new-record">Nouveau meilleur score !</p>' 
-            : `<p>Meilleur score : ${categoryData.bestScore}/10</p>`;
+            : `<p>Meilleur score : ${categoryData.bestScore}/10</p>`;  
             
         const validationMessage = score === 10 
             ? '<p class="success">Félicitations ! Vous avez validé cette catégorie !</p>'
