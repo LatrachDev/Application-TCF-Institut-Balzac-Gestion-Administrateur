@@ -1,3 +1,26 @@
+// Ajouter au début du fichier
+document.addEventListener('DOMContentLoaded', () => {
+    // Vérifier si l'utilisateur est connecté et est un administrateur
+    const username = localStorage.getItem('currentUser');
+    if (!username) {
+        window.location.href = 'login.html';
+        return;
+    }
+
+    // Vérifier le statut de l'utilisateur
+    const userData = JSON.parse(localStorage.getItem(username));
+    if (!userData || userData.status !== 'admin') {
+        // Rediriger vers la page d'accueil si l'utilisateur n'est pas un administrateur
+        window.location.href = 'index.html';
+        return;
+    }
+
+    // Si l'utilisateur est un administrateur, initialiser la page
+    displayAllUsers();
+    resetScores();
+});
+
+
 // four filtre ****************************************
 document.getElementById('categoryFilter').addEventListener('change', function() {
     const selectedCategory = this.value.toLowerCase();
