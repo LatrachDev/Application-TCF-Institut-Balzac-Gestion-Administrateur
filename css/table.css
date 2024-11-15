@@ -1,0 +1,138 @@
+/* style.css */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to bottom, #57b9ff, #a5d9ff);
+  }
+  
+  .container {
+    width: 80%;
+    max-width: 1200px;
+    text-align: center;
+  }
+  
+  header {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  header input[type="text"] {
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+    width: 200px;
+  }
+  
+  header button {
+    padding: 10px;
+    border: none;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  
+  .filter {
+    background-color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    /* cursor: cell; */
+    
+  }
+  
+  .categories {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    cursor: pointer;
+  }
+  
+  .grammaire {
+    background: rgba(255, 255, 255, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+    width: 30%;
+  }
+  .vocabulaire {
+    background: rgba(255, 255, 255, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+    width: 30%;
+  }
+  .comprehension {
+    background: rgba(255, 255, 255, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+    width: 30%;
+  }
+  
+  .category h2 {
+    color: #0062ff;
+    background-color: white;
+    border-radius: 20px;
+    padding: 5px 0;
+    margin-bottom: 10px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 8px;
+  }
+  
+  th {
+    background-color: #0062ff;
+    color: white;
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 20px;
+    margin: 5px;
+  }
+  
+  td {
+    padding: 8px;
+    text-align: center;
+    font-size: 14px;
+    color: #333;
+
+  }
+  
+  footer {
+    margin-top: 20px;
+  }
+  
+  .download {
+    padding: 10px 20px;
+    background-color: #0062ff;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 50px;
+  }
+  .search{
+    border-radius: 10px ;
+    outline: none;
+    /* cursor: grabbing; */
+    
+  }
+
+  td{
+    font-size: medium;
+    font-weight: 600;
+  }
+
+
+  
+  
