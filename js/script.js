@@ -992,9 +992,9 @@ let timeLeft = 60;
 let timeUsed = 0;
 
 function initializeQuestions() {
-
+  // Vérifie si les questions existent déjà dans le localStorage
   if (!localStorage.getItem('quizQuestions')) {
-
+      // Si non, initialise avec les questions par défaut
       localStorage.setItem('quizQuestions', JSON.stringify(quizQuestions));
   }
 }
@@ -1033,14 +1033,15 @@ function initializeQuestions() {
 }
 
 
+
 function addQuestion(level, category, newQuestion) {
-    const questions = JSON.parse(localStorage.getItem('quizQuestions'));
-    const levelData = questions.find(q => q.level === level);
-    
-    if (levelData && levelData.categories[category]) {
-        levelData.categories[category].push(newQuestion);
-        localStorage.setItem('quizQuestions', JSON.stringify(questions));
-    }
+  const questions = JSON.parse(localStorage.getItem('quizQuestions'));
+  const levelData = questions.find(q => q.level === level);
+  
+  if (levelData && levelData.categories[category]) {
+      levelData.categories[category].push(newQuestion);
+      updateQuestions(questions);
+  }
 }
 
     function displayUsername() {
@@ -1108,16 +1109,16 @@ function addQuestion(level, category, newQuestion) {
   }
     
   function getQuestions(level, category) {
-
     const allQuestions = JSON.parse(localStorage.getItem('quizQuestions'));
     const levelData = allQuestions.find(q => q.level === level);
     
-    if (!levelData) return [];
+    if (!levelData || !levelData.categories[category]) {
+        return [];
+    }
 
-    const categoryQuestions = levelData.categories[category];
-    if (!categoryQuestions) return [];
-
-    return [...categoryQuestions].sort(() => Math.random() - 0.5).slice(0, 10);
+    return [...levelData.categories[category]]
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 10);
 }
     
 

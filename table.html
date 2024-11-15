@@ -8,8 +8,26 @@
 </head>
 <body>
   <div class="container">
+    <div class="users-list">
+      <h2>Liste des Utilisateurs</h2>
+      <div class="users-table">
+          <table>
+              <thead>
+                  <tr class="innf">
+                      <th>ID</th>
+                      <th>Nom d'utilisateur</th>
+                      <th>Niveau actuel</th>
+                  </tr>
+              </thead>
+              <tbody id="users-list-body">
+                  <!-- Les utilisateurs seront ajoutés ici dynamiquement -->
+              </tbody>
+          </table>
+      </div>
+  </div>
+  
     <header>
-      <input class="search" type="search" placeholder=" Rechercher par ID">
+      <input class="search" type="search" placeholder=" Rechercher par nom d'utilisateur">
        <select class="filter" id="categoryFilter">
         <option value="Toute">Toute</option>
         <option value="Grammaire">Grammaire</option>
@@ -156,10 +174,9 @@
       <button class="download">Télécharger le rapport PDF</button>
     </footer>
   </div>
-  
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="js/script.js"></script>
   <script src="js/table.js"></script>
 </body>
 </html>
-

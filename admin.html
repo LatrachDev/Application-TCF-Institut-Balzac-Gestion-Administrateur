@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Administration - Institut Balzac">
+    <title>Admin Login - Institut Balzac</title>
+    <script src="js/tailwind.js"></script>
+</head>
+<body class="bg-gradient-to-b from-blue-600 to-sky-100 w-full h-screen flex flex-col justify-center items-center">
+    <header class="absolute top-0 mt-5">
+        <a href="index.html">
+            <img class="w-28" src="images/Balzac-logo.png" alt="Logo Institut Balzac">
+        </a>
+    </header>
+
+    <div class="glass-effect p-8 rounded-lg w-72 shadow-lg text-center md:w-96">
+        <h1 class="text-3xl font-bold text-white mb-4">ADMIN LOGIN</h1>
+        <hr class="border-t border-white opacity-30 mb-6">
+    
+        <form id="adminLoginForm" class="space-y-4">
+            <div class="relative">
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username"
+                    placeholder="Nom d'utilisateur" 
+                    class="w-full p-3 rounded-lg bg-white text-black placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                >
+            </div>
+            
+            <div class="relative">
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password"
+                    placeholder="Mot de passe" 
+                    class="w-full p-3 rounded-lg bg-white text-black placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                >
+            </div>
+        
+            <p id="error" class="text-red-400 text-sm mb-4 hidden"></p>
+        
+            <button 
+                type="submit" 
+                id="loginButton"
+                class="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg transition-all duration-300 hover:bg-blue-700 hover:shadow-lg"
+            >
+                Connexion
+            </button>
+        </form>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>
