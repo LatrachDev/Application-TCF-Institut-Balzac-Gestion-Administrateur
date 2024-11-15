@@ -62,7 +62,7 @@ body {
     background-color: #c82333;
 }
 
-/* Main Content Styles */
+
 .section1 {
     margin-top: 80px;
     padding: 20px;
@@ -89,20 +89,13 @@ body {
     margin-bottom: 15px;
 }
 
-/* Niveaux Section */
+
 .niveaux-section {
     padding: 20px;
     text-align: center;
 }
 
-.niveaux-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
+
 
 .niveau-button {
     width: 100%;
@@ -128,9 +121,6 @@ body {
 
 .niveau-progress {
     margin-top: 10px;
-    height: 5px;
-    background-color: #eee;
-    border-radius: 3px;
 }
 
 .niveau-progress-fill {
@@ -186,7 +176,7 @@ body {
     margin-top: 10px;
 }
 
-/* Quiz Section */
+
 .quiz-section {
     max-width: 800px;
     margin: 20px auto;
@@ -251,7 +241,7 @@ body {
     transition: width 0.3s ease;
 }
 
-/* Results Section */
+
 .resultat-container {
     max-width: 600px;
     margin: 20px auto;
@@ -307,7 +297,7 @@ body {
     transform: translateY(-2px);
 }
 
-/* Level Completion Modal */
+
 .level-completion-modal {
     position: fixed;
     top: 0;
@@ -340,7 +330,7 @@ body {
     }
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
     .information {
         flex-direction: column;
@@ -350,10 +340,7 @@ body {
         max-width: 100%;
     }
 
-    .niveaux-container,
-    .categories-container {
-        grid-template-columns: 1fr;
-    }
+
 
     .quiz-section {
         padding: 10px;
