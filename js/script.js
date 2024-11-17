@@ -1198,30 +1198,41 @@ function addQuestion(level, category, newQuestion) {
     }
 
     function checkAnswer(answerIndex) {
-        const question = currentQuestions[currentQuestionIndex];
-        const isCorrect = answerIndex === question.answer;
-        const buttons = document.querySelectorAll('.rep');
-        
-        buttons.forEach(button => button.onclick = null);
-        
-        buttons[question.answer].classList.add('correct');
-        if (!isCorrect) {
-            buttons[answerIndex].classList.add('incorrect');
-        } else {
-            score++;
-        }
-        
-        clearInterval(timer); 
-        
-        currentQuestionIndex++;
-        if (currentQuestionIndex < currentQuestions.length) {
-            displayQuestion();
-            startTimer(); 
-        } else {
-            endQuiz();
-        }
-    }
-
+      const question = currentQuestions[currentQuestionIndex];
+      const isCorrect = answerIndex === question.answer;
+      const buttons = document.querySelectorAll('.rep');
+      
+      buttons.forEach(button => button.onclick = null);
+      
+      buttons[question.answer].classList.add('correct');
+      if (!isCorrect) {
+          buttons[answerIndex].classList.add('incorrect');
+      } else {
+          score++;
+      }
+      
+      // Sauvegarder la question et la réponse de l'utilisateur
+      if (!currentQuestions.lastQuestions) {
+          currentQuestions.lastQuestions = [];
+      }
+      
+      currentQuestions.lastQuestions.push({
+          question: question.question,
+          options: question.options,
+          userAnswer: answerIndex,
+          correctAnswer: question.answer
+      });
+      
+      clearInterval(timer);
+      
+      currentQuestionIndex++;
+      if (currentQuestionIndex < currentQuestions.length) {
+          displayQuestion();
+          startTimer();
+      } else {
+          endQuiz();
+      }
+  }
 
 
 
@@ -1249,6 +1260,7 @@ function endQuiz() {
       categoryData.time = Math.min(categoryData.time || Infinity, timeUsed);
       categoryData.score = score;
       categoryData.bestScore = Math.max(categoryData.bestScore || 0, score);
+      categoryData.lastQuestions = currentQuestions.lastQuestions;
 
       if (score === 10) {
           categoryData.validation = true;
@@ -1397,81 +1409,115 @@ function updateTableData() {
 
 function downloadPDF() {
   try {
-    // Créer une nouvelle instance de jsPDF
     const { jsPDF } = window.jspdf;
     if (!jsPDF) {
       throw new Error('jsPDF n\'est pas correctement chargé');
     }
 
-    const doc = new jsPDF();
-    
-    // Récupérer les données de l'utilisateur
-    const username = localStorage.getItem('currentUser');
-    if (!username) {
-      throw new Error('Utilisateur non connecté');
+    // Récupérer l'utilisateur sélectionné (soit l'utilisateur actuel, soit celui sélectionné dans la table)
+    const selectedUsername = document.querySelector('.search')?.value || localStorage.getItem('currentUser');
+    if (!selectedUsername) {
+      throw new Error('Aucun utilisateur sélectionné');
     }
 
-    const userData = JSON.parse(localStorage.getItem(username));
+    const userData = JSON.parse(localStorage.getItem(selectedUsername));
     if (!userData) {
       throw new Error('Données utilisateur non trouvées');
     }
 
-    // Configuration du style
-    doc.setFont("helvetica");
+    const doc = new jsPDF();
+    let yPos = 20;
     
-    // Titre
+    // En-tête du rapport
+    doc.setFont("helvetica", "bold");
     doc.setFontSize(20);
     doc.setTextColor(0, 123, 255);
-    doc.text("Rapport de Progression", 20, 20);
+    doc.text("Rapport de Test TCF", 20, yPos);
     
     // Informations utilisateur
+    yPos += 20;
     doc.setFontSize(14);
     doc.setTextColor(0, 0, 0);
-    doc.text(`Utilisateur: ${username}`, 20, 40);
-    doc.text(`Niveau actuel: ${userData.currentLevel || 'Non défini'}`, 20, 50);
-
-    // En-têtes des colonnes
-    let yPos = 70;
-    doc.setFontSize(12);
-    doc.text("Niveau", 20, yPos);
-    doc.text("Catégorie", 60, yPos);
-    doc.text("Score", 100, yPos);
-    doc.text("Tentatives", 140, yPos);
+    doc.text(`Utilisateur: ${selectedUsername}`, 20, yPos);
+    doc.text(`Niveau actuel: ${userData.currentLevel}`, 20, yPos + 10);
     
-    // Données de progression
-    yPos += 10;
+    // Parcourir les niveaux et catégories
     const levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
     const categories = ['grammaire', 'vocabulaire', 'comprehension'];
 
     levels.forEach(level => {
-      categories.forEach(category => {
-        // Récupérer les éléments du DOM
-        const scoreElement = document.getElementById(`score-${category}-${level}`);
-        const attemptsElement = document.getElementById(`attempts-${category}-${level}`);
-        
-        if (scoreElement && attemptsElement) {
-          doc.text(level, 20, yPos);
-          doc.text(category, 60, yPos);
-          doc.text(scoreElement.textContent, 100, yPos);
-          doc.text(attemptsElement.textContent, 140, yPos);
+      if (userData.levels[level]) {
+        categories.forEach(category => {
+          const categoryData = userData.levels[level].categories[category];
           
-          yPos += 10;
-          
-          // Ajouter une nouvelle page si nécessaire
-          if (yPos > 280) {
-            doc.addPage();
-            yPos = 20;
+          if (categoryData && categoryData.attempts > 0) {
+            yPos += 30;
+            
+            // Vérifier si on a besoin d'une nouvelle page
+            if (yPos > 250) {
+              doc.addPage();
+              yPos = 20;
+            }
+
+            // Titre de la section
+            doc.setFontSize(16);
+            doc.setTextColor(0, 123, 255);
+            doc.text(`${level} - ${category.charAt(0).toUpperCase() + category.slice(1)}`, 20, yPos);
+            
+            // Informations du test
+            doc.setFontSize(12);
+            doc.setTextColor(0, 0, 0);
+            yPos += 10;
+            doc.text(`Score: ${categoryData.score}/10`, 20, yPos);
+            doc.text(`Temps: ${Math.floor(categoryData.time/60)}:${(categoryData.time%60).toString().padStart(2, '0')}`, 100, yPos);
+            
+            // Questions et réponses
+            if (categoryData.lastQuestions) {
+              yPos += 10;
+              doc.setFontSize(11);
+              
+              categoryData.lastQuestions.forEach((q, index) => {
+                yPos += 15;
+                
+                // Nouvelle page si nécessaire
+                if (yPos > 270) {
+                  doc.addPage();
+                  yPos = 20;
+                }
+                
+                // Question
+                doc.setFont("helvetica", "bold");
+                doc.text(`Question ${index + 1}: ${q.question}`, 20, yPos);
+                
+                // Options et réponses
+                doc.setFont("helvetica", "normal");
+                yPos += 7;
+                q.options.forEach((option, optIndex) => {
+                  const prefix = optIndex === q.userAnswer ? '➤' : 
+                               optIndex === q.correctAnswer ? '✓' : ' ';
+                  const color = optIndex === q.userAnswer ? 
+                               (optIndex === q.correctAnswer ? [0, 128, 0] : [255, 0, 0]) : 
+                               (optIndex === q.correctAnswer ? [0, 128, 0] : [0, 0, 0]);
+                  
+                  doc.setTextColor(...color);
+                  doc.text(`${prefix} ${option}`, 25, yPos);
+                  yPos += 5;
+                });
+                
+                doc.setTextColor(0, 0, 0);
+              });
+            }
           }
-        }
-      });
+        });
+      }
     });
 
-    // Ajouter la date de génération
+    // Pied de page
     doc.setFontSize(10);
-    doc.text(`Généré le ${new Date().toLocaleDateString()}`, 20, 280);
+    doc.text(`Rapport généré le ${new Date().toLocaleDateString()}`, 20, 280);
 
     // Sauvegarder le PDF
-    doc.save(`rapport_progression_${username}.pdf`);
+    doc.save(`rapport_TCF_${selectedUsername}.pdf`);
 
   } catch (error) {
     console.error('Erreur lors de la génération du PDF:', error);
