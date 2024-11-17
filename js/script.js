@@ -991,10 +991,12 @@ let timer;
 let timeLeft = 60; 
 let timeUsed = 0;
 
+
 function initializeQuestions() {
-
-  if (!localStorage.getItem('quizQuestions')) {
-
+  // Vérifie si les questions existent déjà dans le localStorage
+  const storedQuestions = localStorage.getItem('quizQuestions');
+  if (!storedQuestions) {
+      // Si non, initialise avec les questions par défaut
       localStorage.setItem('quizQuestions', JSON.stringify(quizQuestions));
   }
 }
@@ -1033,14 +1035,15 @@ function initializeQuestions() {
 }
 
 
+
 function addQuestion(level, category, newQuestion) {
-    const questions = JSON.parse(localStorage.getItem('quizQuestions'));
-    const levelData = questions.find(q => q.level === level);
-    
-    if (levelData && levelData.categories[category]) {
-        levelData.categories[category].push(newQuestion);
-        localStorage.setItem('quizQuestions', JSON.stringify(questions));
-    }
+  const questions = JSON.parse(localStorage.getItem('quizQuestions'));
+  const levelData = questions.find(q => q.level === level);
+  
+  if (levelData && levelData.categories[category]) {
+      levelData.categories[category].push(newQuestion);
+      updateQuestions(questions);
+  }
 }
 
     function displayUsername() {
@@ -1108,16 +1111,16 @@ function addQuestion(level, category, newQuestion) {
   }
     
   function getQuestions(level, category) {
-
     const allQuestions = JSON.parse(localStorage.getItem('quizQuestions'));
     const levelData = allQuestions.find(q => q.level === level);
     
-    if (!levelData) return [];
+    if (!levelData || !levelData.categories[category]) {
+        return [];
+    }
 
-    const categoryQuestions = levelData.categories[category];
-    if (!categoryQuestions) return [];
-
-    return [...categoryQuestions].sort(() => Math.random() - 0.5).slice(0, 10);
+    return [...levelData.categories[category]]
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 10);
 }
     
 
@@ -1350,13 +1353,10 @@ document.addEventListener('DOMContentLoaded', initApp);
 
 
 
-
-
-
-
-//******************************************************************************************************
-//****************************************************************************************************** 
-//****************************************************************************************************** 
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -1395,85 +1395,128 @@ function updateTableData() {
 }
 
 function downloadPDF() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  
-  // Récupérer les données de l'utilisateur
-  const username = localStorage.getItem('currentUser');
-  const userData = JSON.parse(localStorage.getItem(username));
-  
-  // Configuration du style
-  doc.setFont("helvetica");
-  doc.setFontSize(20);
-  doc.setTextColor(0, 123, 255);
-  
-  // Titre
-  doc.text("Rapport de Progression", 20, 20);
-  
-  // Informations de l'utilisateur
-  doc.setFontSize(14);
-  doc.setTextColor(0, 0, 0);
-  doc.text(`Utilisateur: ${username}`, 20, 35);
-  doc.text(`Niveau actuel: ${userData.currentLevel}`, 20, 45);
-  
-  let yPos = 60;
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    // Récupérer les données de l'utilisateur
+    const username = localStorage.getItem('currentUser');
+    if (!username) {
+      console.error('Utilisateur non connecté');
+      return;
+    }
 
-  // Parcourir tous les niveaux
-  ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].forEach(level => {
-    if (userData.levels[level]) {
-      doc.setFontSize(16);
-      doc.setTextColor(0, 123, 255);
-      doc.text(`Niveau ${level}`, 20, yPos);
-      yPos += 10;
-      
-      // Parcourir toutes les catégories
-      ['grammaire', 'vocabulaire', 'comprehension'].forEach(category => {
-        const categoryData = userData.levels[level].categories[category];
-        if (categoryData) {
-          doc.setFontSize(12);
-          doc.setTextColor(0, 0, 0);
-          doc.text(`${category.charAt(0).toUpperCase() + category.slice(1)}:`, 30, yPos);
-          doc.text(`Score: ${categoryData.bestScore}/10`, 100, yPos);
-          doc.text(`Tentatives: ${categoryData.attempts}`, 150, yPos);
-          yPos += 15;
+    const userData = JSON.parse(localStorage.getItem(username));
+    if (!userData) {
+      console.error('Données utilisateur non trouvées');
+      return;
+    }
 
-          // Ajouter les questions et réponses si des tentatives ont été faites
-          if (categoryData.attempts > 0) {
-            // Récupérer les questions pour ce niveau et cette catégorie
-            const questions = quizQuestions.find(q => q.level === level)?.categories[category];
-            
-            if (questions) {
+    // Récupérer les questions du quiz
+    const quizQuestions = JSON.parse(localStorage.getItem('quizQuestions'));
+    if (!quizQuestions) {
+      console.error('Questions non trouvées');
+      return;
+    }
+
+    // Configuration du style
+    doc.setFont("helvetica");
+    doc.setFontSize(20);
+    doc.setTextColor(0, 123, 255);
+    
+    // Titre
+    doc.text("Rapport de Progression Détaillé", 20, 20);
+    
+    // Information utilisateur
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Utilisateur: ${username}`, 20, 40);
+    doc.text(`Niveau actuel: ${userData.currentLevel}`, 20, 50);
+
+    let yPos = 70;
+
+    // Parcourir tous les niveaux
+    ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].forEach(level => {
+      // Vérifier si l'utilisateur a des données pour ce niveau
+      if (userData.levels[level]) {
+        doc.setFontSize(16);
+        doc.setTextColor(0, 123, 255);
+        doc.text(`Niveau ${level}`, 20, yPos);
+        yPos += 10;
+
+        // Parcourir toutes les catégories
+        ['grammaire', 'vocabulaire', 'comprehension'].forEach(category => {
+          const categoryData = userData.levels[level].categories[category];
+          if (categoryData && categoryData.attempts > 0) {
+            doc.setFontSize(14);
+            doc.setTextColor(0, 0, 0);
+            doc.text(`${category.charAt(0).toUpperCase() + category.slice(1)}`, 25, yPos);
+            doc.text(`Score: ${categoryData.bestScore}/10 - Tentatives: ${categoryData.attempts}`, 100, yPos);
+            yPos += 10;
+
+            // Trouver les questions pour cette catégorie
+            const categoryQuestions = quizQuestions.find(q => q.level === level)?.categories[category];
+            if (categoryQuestions) {
               doc.setFontSize(10);
-              questions.forEach((q, index) => {
+              categoryQuestions.forEach((question, index) => {
                 // Vérifier si on a besoin d'une nouvelle page
                 if (yPos > 270) {
                   doc.addPage();
                   yPos = 20;
                 }
 
-                doc.text(`Q${index + 1}: ${q.question}`, 40, yPos);
-                yPos += 8;
-                doc.text(`Réponse correcte: ${q.options[q.answer]}`, 45, yPos);
-                yPos += 12;
+                // Question
+                doc.setTextColor(0, 0, 0);
+                doc.text(`Q${index + 1}: ${question.question}`, 30, yPos);
+                yPos += 7;
+
+                // Options
+                question.options.forEach((option, optIndex) => {
+                  const isCorrect = optIndex === question.answer;
+                  doc.setTextColor(isCorrect ? 0, 128, 0 : 0, 0, 0);
+                  doc.text(`${String.fromCharCode(97 + optIndex)}) ${option}${isCorrect ? ' ✓' : ''}`, 35, yPos);
+                  yPos += 5;
+                });
+
+                yPos += 5;
               });
             }
+
+            yPos += 10;
           }
-          
-          yPos += 10;
-        }
-      });
-      
-      // Vérifier si on a besoin d'une nouvelle page
-      if (yPos > 270) {
+        });
+
+        // Ajouter une nouvelle page pour le prochain niveau
         doc.addPage();
         yPos = 20;
       }
-    }
-  });
+    });
 
-  // Sauvegarder le PDF
-  doc.save(`rapport_progression_${username}.pdf`);
+    // Ajouter une légende à la fin
+    doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0);
+    doc.text("Légende:", 20, yPos);
+    yPos += 7;
+    doc.setTextColor(0, 128, 0);
+    doc.text("✓ = Réponse correcte", 25, yPos);
+
+    // Sauvegarder le PDF
+    doc.save(`rapport_progression_${username}_details.pdf`);
+  } catch (error) {
+    console.error('Erreur lors de la génération du PDF:', error);
+  }
 }
+
+// Ajouter un écouteur d'événement au chargement de la page
+document.addEventListener('DOMContentLoaded', function() {
+  const downloadButton = document.querySelector('.download');
+  if (downloadButton) {
+      downloadButton.addEventListener('click', downloadPDF);
+      console.log('Écouteur d\'événement ajouté au bouton de téléchargement');
+  } else {
+      console.error('Bouton de téléchargement non trouvé');
+  }
+});
     
     // Ajouter l'écouteur d'événement sur le bouton de téléchargement
     document.addEventListener('DOMContentLoaded', function() {

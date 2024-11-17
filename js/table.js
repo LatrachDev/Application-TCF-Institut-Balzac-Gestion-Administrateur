@@ -174,6 +174,3 @@ document.addEventListener('DOMContentLoaded', () => {
     displayAllUsers();
     resetScores();
 });
-
-
-

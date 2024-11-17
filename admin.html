@@ -1,57 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="Participez au quiz TCF pour tester vos connaissances en français. Découvrez votre niveau de maîtrise, de A1 à C2, et progressez avec l'Institut Balzac.">
-        <meta name="keywords" content="Quiz TCF, test de français, niveau de français, évaluation de langue, Institut Balzac, test TCF, niveau A1 C2, apprendre français">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Admin login</title>
-        <script src="/js/tailwind.js"></script>
-    </head>
-    <body class="bg-gradient-to-b from-blue-600 to-sky-100 w-full h-screen flex flex-col justify-center items-center">
-        <header class="absolute top-0 mt-5">
-            <a href="login.html"><img class="w-28" src="Images/Balzac-logo.png" alt="Balzac-logo"></a>
-        </header>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Administration - Institut Balzac">
+    <title>Admin Login - Institut Balzac</title>
+    <script src="js/tailwind.js"></script>
+</head>
+<body class="bg-gradient-to-b from-blue-600 to-sky-100 w-full h-screen flex flex-col justify-center items-center">
+    <header class="absolute top-0 mt-5">
+        <a href="index.html">
+            <img class="w-28" src="images/Balzac-logo.png" alt="Logo Institut Balzac">
+        </a>
+    </header>
 
-        <div class="bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm p-8 rounded-lg w-72 shadow-lg text-center md:w-96">
+    <div class="glass-effect p-8 rounded-lg w-72 shadow-lg text-center md:w-96">
+        <h1 class="text-3xl font-bold text-white mb-4">ADMIN LOGIN</h1>
+        <hr class="border-t border-white opacity-30 mb-6">
+    
+        <form id="adminLoginForm" class="space-y-4">
+            <div class="relative">
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username"
+                    placeholder="Nom d'utilisateur" 
+                    class="w-full p-3 rounded-lg bg-white text-black placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                >
+            </div>
             
-            <h2 class="text-center text-2xl font-bold text-white uppercase mb-6">Admin Login</h2>
-            
-            <hr class="border-t border-white mb-6">
-
-            <form id="adminLoginForm" class="space-y-4">
-
-                <div>
-                    <input placeholder="username" type="text" id="username" class="w-full p-3 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
-                </div>
-
-                <div>
-                    <input placeholder="password" type="password" id="password" class="w-full p-3 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
-                </div>
-
-                <button type="submit" class="w-full bg-blue-500 text-white font-bold py-2 rounded-lg hover:bg-blue-600">Login</button>
-                
-                <p id="errorMessage" class="text-red-500 text-center mt-4 hidden">Invalid username or password</p>
-            
-            </form>
-
-        </div>
+            <div class="relative">
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password"
+                    placeholder="Mot de passe" 
+                    class="w-full p-3 rounded-lg bg-white text-black placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                >
+            </div>
         
-        <script>
-            document.getElementById('adminLoginForm').addEventListener('submit', function(event) {
-                event.preventDefault(); // Prevent form submission
+            <p id="error" class="text-red-400 text-sm mb-4 hidden"></p>
+        
+            <button 
+                type="submit" 
+                id="loginButton"
+                class="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg transition-all duration-300 hover:bg-blue-700 hover:shadow-lg"
+            >
+                Connexion
+            </button>
+        </form>
+    </div>
 
-                const username = document.getElementById('username').value;
-                const password = document.getElementById('password').value;
-                const errorMessage = document.getElementById('errorMessage');
-
-                if (username === 'admin' && password === 'admin') {
-                    window.location.href = 'gestionQuestions.html';
-                } else {
-                    errorMessage.classList.remove('hidden');
-                }
-            });
-        </script>
-    </body>
+    <script src="js/admin.js"></script>
+</body>
 </html>
