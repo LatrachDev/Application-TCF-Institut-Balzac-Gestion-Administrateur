@@ -1001,8 +1001,6 @@ function initializeQuestions() {
   }
 }
 
-
-
     function checkUserAuth() {
         const username = localStorage.getItem('currentUser');
         if (!username) {
