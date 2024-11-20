@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('admin', JSON.stringify(adminUser));
                 localStorage.setItem('currentUser', 'admin');
                 console.log('Admin connecté avec succès');
-                window.location.href = 'gestionQuestions.html';
+                window.location.href = 'statistique.html';
             } catch (error) {
                 console.error('Erreur:', error);
                 showError('Erreur lors de la connexion');
