@@ -1406,7 +1406,6 @@ function updateTableData() {
   });
 }
 
-
 function downloadPDF() {
   try {
     const { jsPDF } = window.jspdf;
@@ -1414,7 +1413,6 @@ function downloadPDF() {
       throw new Error('jsPDF n\'est pas correctement chargé');
     }
 
-    // Récupérer l'utilisateur sélectionné (soit l'utilisateur actuel, soit celui sélectionné dans la table)
     const selectedUsername = document.querySelector('.search')?.value || localStorage.getItem('currentUser');
     if (!selectedUsername) {
       throw new Error('Aucun utilisateur sélectionné');
@@ -1493,8 +1491,8 @@ function downloadPDF() {
                 doc.setFont("helvetica", "normal");
                 yPos += 7;
                 q.options.forEach((option, optIndex) => {
-                  const prefix = optIndex === q.userAnswer ? '➤' : 
-                               optIndex === q.correctAnswer ? '✓' : ' ';
+                  const prefix = optIndex === q.userAnswer ? 'Votre réponse :' : 
+                               optIndex === q.correctAnswer ? 'Réponse correcte :' : ' ';
                   const color = optIndex === q.userAnswer ? 
                                (optIndex === q.correctAnswer ? [0, 128, 0] : [255, 0, 0]) : 
                                (optIndex === q.correctAnswer ? [0, 128, 0] : [0, 0, 0]);
@@ -1524,6 +1522,8 @@ function downloadPDF() {
     alert('Une erreur est survenue lors de la génération du PDF: ' + error.message);
   }
 }
+
+
 
 // Ajouter un écouteur d'événement au chargement de la page
 document.addEventListener('DOMContentLoaded', function() {
