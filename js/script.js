@@ -1490,7 +1490,7 @@ function downloadPDF() {
                 doc.setFont("helvetica", "normal");
                 yPos += 7;
                 q.options.forEach((option, optIndex) => {
-                  const prefix = optIndex === q.userAnswer ? 'Votre réponse :' : 
+                  const prefix = optIndex === q.userAnswer ? 'La réponse choisie :' : 
                                optIndex === q.correctAnswer ? 'Réponse correcte :' : ' ';
                   const color = optIndex === q.userAnswer ? 
                                (optIndex === q.correctAnswer ? [0, 128, 0] : [255, 0, 0]) : 
