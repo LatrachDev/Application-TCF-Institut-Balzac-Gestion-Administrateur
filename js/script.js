@@ -993,10 +993,10 @@ let timeUsed = 0;
 
 
 function initializeQuestions() {
-  // Vérifie si les questions existent déjà dans le localStorage
+  // Verifie si les questions existent deje dans le localStorage
   const storedQuestions = localStorage.getItem('quizQuestions');
   if (!storedQuestions) {
-      // Si non, initialise avec les questions par défaut
+      // Si non, initialise avec les questions par defaut
       localStorage.setItem('quizQuestions', JSON.stringify(quizQuestions));
   }
 }
@@ -1153,7 +1153,7 @@ function addQuestion(level, category, newQuestion) {
       const timerDisplay = document.querySelector('.timer-display');
       
       clearInterval(timer);
-      timeLeft = 60; // Réinitialisation à 60 secondes
+      timeLeft = 60; // Reinitialisation a 60 secondes
       
       timer = setInterval(() => {
           timerDisplay.textContent = `${timeLeft}s`;
@@ -1211,7 +1211,7 @@ function addQuestion(level, category, newQuestion) {
           score++;
       }
       
-      // Sauvegarder la question et la réponse de l'utilisateur
+      // Sauvegarder la question et la reponse de l'utilisateur
       if (!currentQuestions.lastQuestions) {
           currentQuestions.lastQuestions = [];
       }
@@ -1389,13 +1389,13 @@ function updateTableData() {
               
               const categoryData = userData.levels[level].categories[category];
               
-              // Mettre à jour le score
+              // Mettre a jour le score
               const scoreElement = document.getElementById(`score-${category}-${level}`);
               if (scoreElement) {
                   scoreElement.textContent = `${categoryData.bestScore || 0}/10`;
               }
               
-              // Mettre à jour les tentatives
+              // Mettre a jour les tentatives
               const attemptsElement = document.getElementById(`attempts-${category}-${level}`);
               if (attemptsElement) {
                   attemptsElement.textContent = categoryData.attempts || 0;
@@ -1425,7 +1425,7 @@ function downloadPDF() {
     const doc = new jsPDF();
     let yPos = 20;
     
-    // En-tête du rapport
+    // En-tete du rapport
     doc.setFont("helvetica", "bold");
     doc.setFontSize(20);
     doc.setTextColor(0, 123, 255);
@@ -1438,7 +1438,7 @@ function downloadPDF() {
     doc.text(`Utilisateur: ${selectedUsername}`, 20, yPos);
     doc.text(`Niveau actuel: ${userData.currentLevel}`, 20, yPos + 10);
     
-    // Parcourir les niveaux et catégories
+    // Parcourir les niveaux et categories
     const levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
     const categories = ['grammaire', 'vocabulaire', 'comprehension'];
 
@@ -1450,7 +1450,7 @@ function downloadPDF() {
           if (categoryData && categoryData.attempts > 0) {
             yPos += 30;
             
-            // Vérifier si on a besoin d'une nouvelle page
+            // Verifier si on a besoin d'une nouvelle page
             if (yPos > 250) {
               doc.addPage();
               yPos = 20;
@@ -1468,7 +1468,7 @@ function downloadPDF() {
             doc.text(`Score: ${categoryData.score}/10`, 20, yPos);
             doc.text(`Temps: ${Math.floor(categoryData.time/60)}:${(categoryData.time%60).toString().padStart(2, '0')}`, 100, yPos);
             
-            // Questions et réponses
+            // Questions et reponses
             if (categoryData.lastQuestions) {
               yPos += 10;
               doc.setFontSize(11);
@@ -1476,7 +1476,7 @@ function downloadPDF() {
               categoryData.lastQuestions.forEach((q, index) => {
                 yPos += 15;
                 
-                // Nouvelle page si nécessaire
+                // Nouvelle page si necessaire
                 if (yPos > 270) {
                   doc.addPage();
                   yPos = 20;
@@ -1486,7 +1486,7 @@ function downloadPDF() {
                 doc.setFont("helvetica", "bold");
                 doc.text(`Question ${index + 1}: ${q.question}`, 20, yPos);
                 
-                // Options et réponses
+                // Options et reponses
                 doc.setFont("helvetica", "normal");
                 yPos += 7;
                 q.options.forEach((option, optIndex) => {
@@ -1522,7 +1522,7 @@ function downloadPDF() {
   }
 }
 
-// Ajouter un écouteur d'événement au chargement de la page
+// Ajouter un ecouteur d'evenement au chargement de la page
 document.addEventListener('DOMContentLoaded', function() {
   const downloadButton = document.querySelector('.download');
   if (downloadButton) {
@@ -1533,7 +1533,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
     
-    // Ajouter l'écouteur d'événement sur le bouton de téléchargement
+    // Ajouter l'ecouteur d'evenement sur le bouton de telechargement
     document.addEventListener('DOMContentLoaded', function() {
         const downloadButton = document.querySelector('.download');
         if (downloadButton) {
@@ -1542,14 +1542,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.addEventListener('DOMContentLoaded', function() {
-      // Vérifier si l'utilisateur est connecté
+      // Verifier si l'utilisateur est connecte
       const username = localStorage.getItem('currentUser');
       if (!username) {
           window.location.href = 'login.html';
           return;
       }
   
-      // Mettre à jour le tableau avec les données
+      // Mettre a jour le tableau avec les donnees
       updateTableData();
   });
 
