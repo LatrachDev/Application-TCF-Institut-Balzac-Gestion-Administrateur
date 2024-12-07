@@ -993,10 +993,10 @@ let timeUsed = 0;
 
 
 function initializeQuestions() {
-  // Verifie si les questions existent deje dans le localStorage
+
   const storedQuestions = localStorage.getItem('quizQuestions');
   if (!storedQuestions) {
-      // Si non, initialise avec les questions par defaut
+
       localStorage.setItem('quizQuestions', JSON.stringify(quizQuestions));
   }
 }
@@ -1153,7 +1153,7 @@ function addQuestion(level, category, newQuestion) {
       const timerDisplay = document.querySelector('.timer-display');
       
       clearInterval(timer);
-      timeLeft = 60; // Reinitialisation a 60 secondes
+      timeLeft = 60; 
       
       timer = setInterval(() => {
           timerDisplay.textContent = `${timeLeft}s`;
@@ -1233,6 +1233,7 @@ function addQuestion(level, category, newQuestion) {
           endQuiz();
       }
   }
+
 
 
 
@@ -1364,10 +1365,10 @@ function logout() {
 document.addEventListener('DOMContentLoaded', initApp);
 
 
-
+/////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -1405,6 +1406,7 @@ function updateTableData() {
   });
 }
 
+
 function downloadPDF() {
   try {
     const { jsPDF } = window.jspdf;
@@ -1412,6 +1414,7 @@ function downloadPDF() {
       throw new Error('jsPDF n\'est pas correctement chargé');
     }
 
+    // Récupérer l'utilisateur sélectionné (soit l'utilisateur actuel, soit celui sélectionné dans la table)
     const selectedUsername = document.querySelector('.search')?.value || localStorage.getItem('currentUser');
     if (!selectedUsername) {
       throw new Error('Aucun utilisateur sélectionné');

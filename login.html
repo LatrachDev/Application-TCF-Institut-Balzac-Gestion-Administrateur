@@ -6,7 +6,7 @@
     <meta name="description" content="Participez au quiz TCF pour tester vos connaissances en français. Découvrez votre niveau de maîtrise, de A1 à C2, et progressez avec l'Institut Balzac.">
     <meta name="keywords" content="Quiz TCF, test de français, niveau de français, évaluation de langue, Institut Balzac, test TCF, niveau A1 C2, apprendre français">
     <title>Quiz TCF Français - Connexion | Institut Balzac</title>
-    <script src="js/tailwind.js"></script>
+    <script src="./js/tailwind.js"></script>
   
 </head>
 <body class="bg-gradient-to-b from-blue-600 to-sky-100 w-full h-screen flex flex-col justify-center items-center">
@@ -75,7 +75,7 @@
             }
 
             loginForm.addEventListener("submit", (e) => {
-                e.preventDefault();
+                e.preventDefault(); //stop refreshing after submission
                 const username = usernameInput.value.trim();
 
                 if (username === "") {
@@ -92,7 +92,6 @@
                     showError("Le nom d'utilisateur ne doit contenir que des lettres et des chiffres.");
                     return;
                 }
-
 
                 const existingUser = localStorage.getItem(username);
 
