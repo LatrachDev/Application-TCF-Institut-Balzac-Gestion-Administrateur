@@ -1236,45 +1236,46 @@ function addQuestion(level, category, newQuestion) {
 
 
 
-function endQuiz() {
-  clearInterval(timer);
 
-  const username = localStorage.getItem('currentUser');
-  const userData = JSON.parse(localStorage.getItem(username));
-
-
-  if (!userData.levels[currentLevel].categories[currentCategory]) {
-      userData.levels[currentLevel].categories[currentCategory] = {
-          bestScore: 0,
-          attempts: 0,
-          validation: false,
-          time: Infinity
-      };
-  }
-
-  const categoryData = userData.levels[currentLevel].categories[currentCategory];
-  
-
-  if (!categoryData.validation) {
-      categoryData.attempts = (categoryData.attempts || 0) + 1;
-      categoryData.time = Math.min(categoryData.time || 0 , timeUsed);
-      categoryData.score = score;
-      categoryData.bestScore = Math.max(categoryData.bestScore || 0, score);
-      categoryData.lastQuestions = currentQuestions.lastQuestions;
-
-      if (score === 10) {
-          categoryData.validation = true;
+    function endQuiz() {
+      clearInterval(timer);
+    
+      const username = localStorage.getItem('currentUser');
+      const userData = JSON.parse(localStorage.getItem(username));
+    
+    
+      if (!userData.levels[currentLevel].categories[currentCategory]) {
+          userData.levels[currentLevel].categories[currentCategory] = {
+              bestScore: 0,
+              attempts: 0,
+              validation: false,
+              time: Infinity
+          };
       }
-  }
-
-  if (checkLevelCompletion(userData, currentLevel)) {
-      showLevelCompletionMessage();
-  }
-
-  localStorage.setItem(username, JSON.stringify(userData));
-  displayResults(score, timeUsed, categoryData);
-  updateTableData();
-}
+    
+      const categoryData = userData.levels[currentLevel].categories[currentCategory];
+      
+    
+      if (!categoryData.validation) {
+          categoryData.attempts = (categoryData.attempts || 0) + 1;
+          categoryData.time = Math.min(categoryData.time || Infinity, timeUsed);
+          categoryData.score = score;
+          categoryData.bestScore = Math.max(categoryData.bestScore || 0, score);
+          categoryData.lastQuestions = currentQuestions.lastQuestions;
+    
+          if (score === 10) {
+              categoryData.validation = true;
+          }
+      }
+    
+      if (checkLevelCompletion(userData, currentLevel)) {
+          showLevelCompletionMessage();
+      }
+    
+      localStorage.setItem(username, JSON.stringify(userData));
+      displayResults(score, timeUsed, categoryData);
+      updateTableData();
+    }
 
     function checkLevelCompletion(userData, level) {
         const categories = userData.levels[level].categories;
@@ -1492,8 +1493,8 @@ function downloadPDF() {
                 doc.setFont("helvetica", "normal");
                 yPos += 7;
                 q.options.forEach((option, optIndex) => {
-                  const prefix = optIndex === q.userAnswer ? '➤' : 
-                               optIndex === q.correctAnswer ? '✓' : ' ';
+                  const prefix = optIndex === q.userAnswer ? 'Votre réponse :' : 
+                               optIndex === q.correctAnswer ? 'Réponse correcte :' : ' ';
                   const color = optIndex === q.userAnswer ? 
                                (optIndex === q.correctAnswer ? [0, 128, 0] : [255, 0, 0]) : 
                                (optIndex === q.correctAnswer ? [0, 128, 0] : [0, 0, 0]);

@@ -75,7 +75,7 @@
             }
 
             loginForm.addEventListener("submit", (e) => {
-                e.preventDefault();
+                e.preventDefault(); //stop refreshing after submission
                 const username = usernameInput.value.trim();
 
                 if (username === "") {
@@ -92,7 +92,6 @@
                     showError("Le nom d'utilisateur ne doit contenir que des lettres et des chiffres.");
                     return;
                 }
-
 
                 const existingUser = localStorage.getItem(username);
 
