@@ -993,10 +993,10 @@ let timeUsed = 0;
 
 
 function initializeQuestions() {
-  // Vérifie si les questions existent déjà dans le localStorage
+
   const storedQuestions = localStorage.getItem('quizQuestions');
   if (!storedQuestions) {
-      // Si non, initialise avec les questions par défaut
+
       localStorage.setItem('quizQuestions', JSON.stringify(quizQuestions));
   }
 }
@@ -1153,7 +1153,7 @@ function addQuestion(level, category, newQuestion) {
       const timerDisplay = document.querySelector('.timer-display');
       
       clearInterval(timer);
-      timeLeft = 60; // Réinitialisation à 60 secondes
+      timeLeft = 60; 
       
       timer = setInterval(() => {
           timerDisplay.textContent = `${timeLeft}s`;
@@ -1211,7 +1211,7 @@ function addQuestion(level, category, newQuestion) {
           score++;
       }
       
-      // Sauvegarder la question et la réponse de l'utilisateur
+      
       if (!currentQuestions.lastQuestions) {
           currentQuestions.lastQuestions = [];
       }
@@ -1257,7 +1257,7 @@ function endQuiz() {
 
   if (!categoryData.validation) {
       categoryData.attempts = (categoryData.attempts || 0) + 1;
-      categoryData.time = Math.min(categoryData.time || Infinity, timeUsed);
+      categoryData.time = Math.min(categoryData.time || 0 , timeUsed);
       categoryData.score = score;
       categoryData.bestScore = Math.max(categoryData.bestScore || 0, score);
       categoryData.lastQuestions = currentQuestions.lastQuestions;
@@ -1364,8 +1364,7 @@ function logout() {
 document.addEventListener('DOMContentLoaded', initApp);
 
 
-
-//////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
