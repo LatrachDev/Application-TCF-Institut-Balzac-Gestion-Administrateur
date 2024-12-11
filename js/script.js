@@ -1153,7 +1153,7 @@ function addQuestion(level, category, newQuestion) {
       const timerDisplay = document.querySelector('.timer-display');
       
       clearInterval(timer);
-      timeLeft = 60; 
+      timeLeft = 20; 
       
       timer = setInterval(() => {
           timerDisplay.textContent = `${timeLeft}s`;
