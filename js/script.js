@@ -988,7 +988,7 @@ let currentQuestions = [];
 let currentQuestionIndex = 0;
 let score = 0;
 let timer;
-let timeLeft = 60; 
+let timeLeft = 20; 
 let timeUsed = 0;
 
 
@@ -1153,7 +1153,7 @@ function addQuestion(level, category, newQuestion) {
       const timerDisplay = document.querySelector('.timer-display');
       
       clearInterval(timer);
-      timeLeft = 60; 
+      timeLeft = 20; 
       
       timer = setInterval(() => {
           timerDisplay.textContent = `${timeLeft}s`;
